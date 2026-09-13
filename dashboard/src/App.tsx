@@ -44,6 +44,7 @@ interface AppProps {
 	pageType: PageType;
 	doctype?: string;
 	docName?: string;
+	printFormat?: string;
 	listRows: PortalListRow[];
 	detailDoc?: Record<string, unknown>;
 	account: {
@@ -189,6 +190,7 @@ function DashboardShell(props: AppProps) {
 						doc={props.detailDoc}
 						backHref={props.doctype ? LIST_META[props.doctype]?.basePath : undefined}
 						lang={props.lang}
+						printFormat={props.printFormat}
 					/>
 				)}
 				{props.pageType === 'account' && <AccountPage {...props.account} lang={props.lang} />}

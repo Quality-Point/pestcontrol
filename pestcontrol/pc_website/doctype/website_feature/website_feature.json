@@ -8,6 +8,7 @@
  "engine": "InnoDB",
  "field_order": [
   "section",
+  "title",
   "section_break_wfer",
   "display_order",
   "published",
@@ -51,12 +52,17 @@
    "label": "Article",
    "options": "Website Article",
    "reqd": 1
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "label": "Title"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-08-27 13:43:58.100074",
+ "modified": "2026-09-13 12:56:24.375994",
  "modified_by": "Administrator",
  "module": "PC Website",
  "name": "Website Feature",
@@ -78,7 +84,9 @@
  ],
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "title"
 }

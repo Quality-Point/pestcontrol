@@ -1,6 +1,7 @@
 import { Box, Card, CardContent, Typography, Button, Stack, Divider } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForwardIos';
+import PrintIcon from '@mui/icons-material/Print';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ar';
 import StatusChip from '../components/StatusChip';
@@ -10,6 +11,7 @@ interface DocumentDetailProps {
 	doc: Record<string, unknown>;
 	backHref?: string;
 	lang: Lang;
+	printFormat?: string;
 }
 
 interface DocItem {
@@ -20,22 +22,27 @@ interface DocItem {
 	amount?: number;
 }
 
-export default function DocumentDetail({ doc, backHref, lang }: DocumentDetailProps) {
+export default function DocumentDetail({ doc, backHref, lang, printFormat }: DocumentDetailProps) {
 	const s = t(lang);
 	const currency = (doc.currency as string | undefined) ?? '';
 	const items = (doc.items as DocItem[] | undefined) ?? [];
 	const isRtl = lang === 'ar';
+	const printUrl = `/printview?doctype=${encodeURIComponent(String(doc.doctype))}&name=${encodeURIComponent(String(doc.name))}&format=${encodeURIComponent(printFormat ?? '')}`;
 
 	return (
 		<Box>
-			<Button
-				startIcon={isRtl ? <ArrowForwardIcon /> : <ArrowBackIcon />}
-				component="a"
-				href={backHref ?? '/portal'}
-				sx={{ mb: 2 }}
-			>
-				{s.back}
-			</Button>
+			<Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+				<Button
+					startIcon={isRtl ? <ArrowForwardIcon /> : <ArrowBackIcon />}
+					component="a"
+					href={backHref ?? '/portal'}
+				>
+					{s.back}
+				</Button>
+				<Button startIcon={<PrintIcon />} component="a" href={printUrl} target="_blank" rel="noopener noreferrer">
+					{s.print}
+				</Button>
+			</Stack>
 
 			<Card>
 				<CardContent sx={{ p: 4 }}>
