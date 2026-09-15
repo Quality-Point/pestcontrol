@@ -15,6 +15,7 @@
   "category",
   "pest_type",
   "display_order",
+  "title",
   "route",
   "published",
   "section_break_wpct",
@@ -86,13 +87,19 @@
    "fieldname": "pest_info_section",
    "fieldtype": "Section Break",
    "label": "Pest info"
+  },
+  {
+   "fieldname": "title",
+   "fieldtype": "Data",
+   "hidden": 1,
+   "label": "Title"
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "is_published_field": "published",
  "links": [],
- "modified": "2026-09-07 00:00:00.000000",
+ "modified": "2026-09-12 10:28:18.853351",
  "modified_by": "Administrator",
  "module": "PC Website",
  "name": "Website Pest",
@@ -115,7 +122,9 @@
  "route": "pest-library",
  "row_format": "Dynamic",
  "rows_threshold_for_grid_search": 20,
+ "show_title_field_in_link": 1,
  "sort_field": "creation",
  "sort_order": "DESC",
- "states": []
+ "states": [],
+ "title_field": "title"
 }

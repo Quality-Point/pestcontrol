@@ -10,6 +10,7 @@ if (rootEl) {
 	const pageType = (rootEl.dataset.pageType as PageType | undefined) ?? 'overview';
 	const doctype = rootEl.dataset.doctype;
 	const docName = rootEl.dataset.name;
+	const printFormat = rootEl.dataset.printFormat;
 	const direction = (document.documentElement.getAttribute('dir') as 'ltr' | 'rtl') || 'ltr';
 	const lang = (rootEl.dataset.lang as Lang | undefined) ?? 'en';
 
@@ -28,6 +29,7 @@ if (rootEl) {
 				pageType={pageType}
 				doctype={doctype}
 				docName={docName}
+				printFormat={printFormat}
 				listRows={listRows}
 				detailDoc={detailDoc}
 				account={{
