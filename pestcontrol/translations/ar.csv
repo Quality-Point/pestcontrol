@@ -491,3 +491,35 @@ Full-bleed background photo behind the login / sign up forms.,صورة خلفي�
 Team Size,حجم الفريق
 Satisfaction Rate (%),معدل الرضا (%)
 Years Experience,سنوات الخبرة
+Language served at the site root and used as the hreflang x-default. Set this instead of hardcoding a language anywhere.,اللغة المستخدمة في جذر الموقع وتستخدم كلغة افتراضية. قم بتعيين هذا بدلاً من ترميز اللغة في أي مكان.
+Default Language,اللغة الافتراضية
+X (Twitter) Handle,معرف X (تويتر)
+Canonical Base URL,عنوان URL الأساسي القانوني
+Google Business Profile URL,عنوان URL لملف تعريف Google للأعمال
+Links the site to your Google listing in structured data. Important for local search.,يربط الموقع بقائمتك على Google في البيانات المنظمة. مهم للبحث المحلي.
+Used when a page has no image of its own. 1200x630 works best.,يُستخدم عندما لا تحتوي الصفحة على صورة خاصة بها. أفضل حجم هو 1200x630.
+Looks like G-XXXXXXXXXX. Leave blank to disable analytics.,يبدو مثل G-XXXXXXXXXX. اتركه فارغًا لتعطيل التحليلات.
+The content value of the google-site-verification meta tag.,قيمة المحتوى لعلامة meta لتحقق google.
+Looks like GTM-XXXXXXX. Takes precedence over the GA4 ID if both are set.,يبدو مثل GTM-XXXXXXX. له الأولوية على معرف GA4 إذا تم تعيين كلاهما.
+Used to build the structured data that search engines read about the company.,يُستخدم لبناء البيانات المنظمة التي تقرأها محركات البحث حول الشركة.
+Business Details,تفاصيل العمل
+Founding Year,سنة التأسيس
+Commercial Registration No.,رقم السجل التجاري
+Price Range,نطاق الأسعار
+VAT Number,رقم ضريبة القيمة المضافة
+Article,مقال
+Search Engines,محركات البحث
+Default Share Image,صورة المشاركة الافتراضية
+Google Search Console Token,رمز Google Search Console
+Analytics & Verification,التحليلات والتحقق
+GA4 Measurement ID,معرف قياس GA4
+Bing Verification Token,رمز التحقق من Bing
+Google Tag Manager ID,معرف Google Tag Manager
+Legal Name,الاسم القانوني
+Rough price bracket shown in local search results, e.g. $$.,نطاق السعر التقريبي المعروض في نتائج البحث المحلية، على سبيل المثال $$.
+Favicon,أيقونة الموقع
+Page Header Background,خلفية رأس الصفحة
+Google Maps Embed URL,عنوان URL لتضمين خرائط Google
+Phone Numbers,أرقام الهواتف
+Instagram URL,عنوان URL لإنستغرام
+Facebook URL,عنوان URL لفيسبوك

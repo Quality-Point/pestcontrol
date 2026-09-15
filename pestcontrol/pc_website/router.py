@@ -64,6 +64,10 @@ RESERVED_EXACT = frozenset(
 		"favicon.ico",
 		"manifest.json",
 		"website_script.js",
+		# Google Search Console's HTML-file verification method requires this
+		# exact file to return 200 at the bare root, with no redirect -- a
+		# language-prefixed 301 fails verification outright.
+		"google04549cf1f9632b2c.html",
 	)
 )
 
