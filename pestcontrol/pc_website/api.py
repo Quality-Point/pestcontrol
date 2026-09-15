@@ -1,6 +1,8 @@
 # Copyright (c) 2026, QualityPoint and contributors
 # For license information, please see license.txt
 
+import os
+
 import frappe
 from frappe import _
 from frappe.rate_limiter import rate_limit
@@ -21,6 +23,13 @@ MIN_PASSWORD_SCORE = 2
 # How long an email-confirmation link stays usable. Frappe's own signed links
 # never expire; an account activation is worth bounding.
 VERIFICATION_TTL = 24 * 60 * 60
+
+# What a resume may be. `accept=".pdf,.doc,.docx"` on the file input is a
+# hint to the file picker and nothing more -- a POST can carry anything.
+# save_file would eventually stop an oversized upload via check_max_file_size,
+# but only at the site-wide limit and only with frappe's own generic message.
+RESUME_EXTENSIONS = frozenset((".pdf", ".doc", ".docx"))
+MAX_RESUME_BYTES = 5 * 1024 * 1024
 
 
 # Reviewed: intentionally public, this is the site's own contact form
@@ -44,10 +53,37 @@ def submit_contact_form(fname: str, lname: str = "", email: str = "", phone: str
 	return {"success": True}
 
 
+def _read_resume(file_storage):
+	"""Validated resume bytes, or None when nothing was attached.
+
+	Runs before the Job Applicant is inserted so a rejected upload produces a
+	message about the file rather than frappe's generic size error from
+	somewhere downstream. The stream is read once here and the bytes handed
+	on -- a FileStorage cannot be read twice."""
+	if not file_storage or not file_storage.filename:
+		return None
+
+	extension = os.path.splitext(file_storage.filename)[1].lower()
+	if extension not in RESUME_EXTENSIONS:
+		frappe.throw(_("Please attach your resume as a PDF or Word document."))
+
+	content = file_storage.read()
+	if not content:
+		frappe.throw(_("The resume you attached is empty."))
+	if len(content) > MAX_RESUME_BYTES:
+		frappe.throw(_("Your resume is too large. Please attach a file under 5 MB."))
+
+	return content
+
+
 # Reviewed: intentionally public, this is the site's own job application
 # form endpoint; no permission check applies since anonymous applicants are
-# exactly who's meant to call it.
-@frappe.whitelist(allow_guest=True)  # nosemgrep: guest-whitelisted-method
+# exactly who's meant to call it. Rate limited per IP the same way
+# register_account is -- a guest endpoint that inserts records and accepts
+# uploads is the obvious thing to point a script at. `methods` matters on its
+# own: without it a bare GET with query params creates a Job Applicant.
+@frappe.whitelist(allow_guest=True, methods=["POST"])  # nosemgrep: guest-whitelisted-method
+@rate_limit(limit=5, seconds=60 * 60)
 def submit_job_application(
 	full_name: str,
 	email: str,
@@ -111,13 +147,20 @@ def submit_job_application(
 			"upper_range": upper_range if has_salary else 0,
 		}
 	)
+	resume_file = frappe.request.files.get("resume") if frappe.request else None
+	resume_content = _read_resume(resume_file)
+
+	# Job Applicant.before_insert throws on a closed opening, and on a repeat
+	# application when the opening has Prevent Duplicate Applications ticked.
+	# Both messages are already translated and already meant for the
+	# applicant, so they are left to propagate into _server_messages rather
+	# than caught and flattened into a generic failure.
 	doc.insert(ignore_permissions=True)
 
-	resume_file = frappe.request.files.get("resume") if frappe.request else None
-	if resume_file and resume_file.filename:
+	if resume_content is not None:
 		file_doc = save_file(
 			resume_file.filename,
-			resume_file.read(),
+			resume_content,
 			"Job Applicant",
 			doc.name,
 			is_private=1,

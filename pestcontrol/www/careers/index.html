@@ -5,139 +5,86 @@
 {% endblock %}
 
 {% block content %}
-    <!-- Careers Form Section Start -->
-    <div class="contact-form-section careers-section">
+    <!-- Careers Listing Start -->
+    <div class="careers-page">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="contact-us-box careers-box">
-                        <!-- Aside: why join us -->
-                        <aside class="careers-aside">
-                            <div class="section-title">
-                                <h2 class="text-anime-style-2" data-cursor="-opaque">{{ _("Join our team -") }} <span>{{ _("apply today!") }}</span></h2>
-                                <p>{{ _("Tell us about yourself and attach your resume. We'll be in touch if there's a fit.") }}</p>
+            {% if job_openings %}
+            {% if departments or locations %}
+            <!-- Filters Start -->
+            <div class="careers-filters wow fadeInUp" data-careers-filters>
+                {% if departments %}
+                <div class="careers-filter">
+                    <label for="filter_department">{{ _("department") }}</label>
+                    <select id="filter_department" class="form-control" data-careers-filter="department">
+                        <option value="">{{ _("all departments") }}</option>
+                        {% for d in departments %}
+                        <option value="{{ d }}">{{ _(d) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                {% if locations %}
+                <div class="careers-filter">
+                    <label for="filter_location">{{ _("location") }}</label>
+                    <select id="filter_location" class="form-control" data-careers-filter="location">
+                        <option value="">{{ _("all locations") }}</option>
+                        {% for l in locations %}
+                        <option value="{{ l }}">{{ _(l) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+                <p class="careers-count" data-careers-count aria-live="polite"
+                    data-label-template="{{ _('Open positions: {n}') }}"></p>
+            </div>
+            <!-- Filters End -->
+            {% endif %}
+
+            <!-- Openings Grid Start -->
+            <div class="row careers-grid" data-careers-grid>
+                {% for job in job_openings %}
+                <div class="col-lg-4 col-md-6 careers-grid-item" data-department="{{ job.department or '' }}"
+                    data-location="{{ job.location or '' }}">
+                    <!-- Job Card Start -->
+                    <div class="job-card wow fadeInUp" data-wow-delay="{{ loop.index0 * 0.15 }}s">
+                        <div class="job-card-body">
+                            <h3><a href="{{ u('/' ~ job.route) }}">{{ job.job_title }}</a></h3>
+                            <div class="job-card-meta">
+                                {% if job.department %}<span class="job-card-tag"><i class="fa-solid fa-sitemap"></i> {{ _(job.department) }}</span>{% endif %}
+                                {% if job.location %}<span class="job-card-tag"><i class="fa-solid fa-location-dot"></i> {{ _(job.location) }}</span>{% endif %}
+                                {% if job.employment_type %}<span class="job-card-tag"><i class="fa-solid fa-clock"></i> {{ _(job.employment_type) }}</span>{% endif %}
                             </div>
-                            <ul class="careers-perks">
-                                <li>{{ _("Paid training and professional certification") }}</li>
-                                <li>{{ _("Clear path to grow into senior and lead roles") }}</li>
-                                <li>{{ _("Modern equipment and a safety-first culture") }}</li>
-                                <li>{{ _("A supportive, close-knit team") }}</li>
-                            </ul>
-                        </aside>
-
-                        <!-- Form panel -->
-                        <div class="contact-us-form careers-form-panel">
-                            <form id="careerForm" action="#" method="POST" enctype="multipart/form-data" data-toggle="validator" class="contact-form careers-form wow fadeInUp">
-                                <div class="careers-fieldset">
-                                    <p class="careers-legend">{{ _("About you") }}</p>
-                                    <div class="row">
-                                        <div class="form-group col-md-6 mb-4">
-                                            <label for="full_name" class="visually-hidden">{{ _('Full name') }}</label>
-                                            <input type="text" name="full_name" class="form-control" id="full_name" placeholder="{{ _('Full name') }}" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="form-group col-md-6 mb-4">
-                                            <label for="career_email" class="visually-hidden">{{ _('E-mail') }}</label>
-                                            <input type="email" name="email" class="form-control" id="career_email" placeholder="{{ _('E-mail') }}" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="form-group col-md-6 mb-4">
-                                            <label for="career_phone" class="visually-hidden">{{ _('Phone no.') }}</label>
-                                            <input type="text" name="phone" class="form-control" id="career_phone" placeholder="{{ _('Phone no.') }}" required>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="form-group col-md-6 mb-4">
-                                            <label for="career_country" class="visually-hidden">{{ _('Country') }}</label>
-                                            <select name="country" class="form-control" id="career_country">
-                                                <option value="">{{ _('Country') }}</option>
-                                                {% for c in countries %}
-                                                <option value="{{ c }}"{% if c == default_country %} selected{% endif %}>{{ _(c) }}</option>
-                                                {% endfor %}
-                                            </select>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="careers-fieldset">
-                                    <p class="careers-legend">{{ _("The role") }}</p>
-                                    <div class="row">
-                                        <div class="form-group col-md-12 mb-4">
-                                            <label for="position_applied_for" class="visually-hidden">{{ _('Position applying for') }}</label>
-                                            {% if job_openings %}
-                                            <select name="job_opening" class="form-control" id="position_applied_for" required>
-                                                <option value="">{{ _('Select a position') }}</option>
-                                                {% for jo in job_openings %}
-                                                <option value="{{ jo.name }}">{{ jo.job_title }}{% if jo.location %} — {{ jo.location }}{% endif %}</option>
-                                                {% endfor %}
-                                            </select>
-                                            {% else %}
-                                            <input type="text" name="position_applied_for" class="form-control" id="position_applied_for" placeholder="{{ _('Position applying for') }}">
-                                            {% endif %}
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="form-group col-md-12 mb-4">
-                                            <span class="careers-field-label">{{ _('Expected monthly salary') }} <span class="careers-optional">({{ _('optional') }})</span></span>
-                                            <div class="careers-salary">
-                                                <div>
-                                                    <label for="salary_min" class="visually-hidden">{{ _('Minimum expected salary') }}</label>
-                                                    <input type="number" min="0" step="any" name="salary_min" class="form-control" id="salary_min" placeholder="{{ _('From') }}">
-                                                </div>
-                                                <div>
-                                                    <label for="salary_max" class="visually-hidden">{{ _('Maximum expected salary') }}</label>
-                                                    <input type="number" min="0" step="any" name="salary_max" class="form-control" id="salary_max" placeholder="{{ _('To') }}">
-                                                </div>
-                                                <div>
-                                                    <label for="salary_currency" class="visually-hidden">{{ _('Currency') }}</label>
-                                                    <select name="salary_currency" class="form-control" id="salary_currency">
-                                                        {% for cur in currencies %}
-                                                        <option value="{{ cur }}"{% if cur == default_currency %} selected{% endif %}>{{ cur }}</option>
-                                                        {% endfor %}
-                                                    </select>
-                                                </div>
-                                            </div>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="careers-fieldset">
-                                    <p class="careers-legend">{{ _("Your application") }}</p>
-                                    <div class="row">
-                                        <div class="form-group col-md-12 mb-4">
-                                            <label for="career_message" class="visually-hidden">{{ _('Cover letter') }}</label>
-                                            <textarea name="message" class="form-control" id="career_message" rows="5" placeholder="{{ _('Cover letter - tell us why you are a good fit') }}"></textarea>
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="form-group col-md-12 mb-4">
-                                            <label for="resume_link" class="careers-field-label">{{ _('Portfolio / LinkedIn / online CV link') }} <span class="careers-optional">({{ _('optional') }})</span></label>
-                                            <input type="url" name="resume_link" class="form-control" id="resume_link" placeholder="https://">
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-
-                                        <div class="form-group col-md-12 mb-5">
-                                            <label for="resume" class="careers-field-label">{{ _('Resume / CV') }}</label>
-                                            <input type="file" name="resume" class="form-control careers-file" id="resume" accept=".pdf,.doc,.docx">
-                                            <div class="help-block with-errors"></div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="careers-submit">
-                                    <button type="submit" class="btn-default"><span>{{ _("submit application") }}</span></button>
-                                    <div id="msgSubmit" class="h3 hidden"></div>
-                                </div>
-                            </form>
+                        </div>
+                        <div class="job-card-footer">
+                            <a href="{{ u('/' ~ job.route) }}" class="readmore-btn">{{ _("view details") }}</a>
                         </div>
                     </div>
+                    <!-- Job Card End -->
                 </div>
+                {% endfor %}
             </div>
+            <!-- Openings Grid End -->
+
+            <p class="careers-empty-filtered" data-careers-no-match hidden>{{ _("No openings match the filters you selected.") }}</p>
+            {% else %}
+            <!-- Empty State Start -->
+            <div class="careers-empty wow fadeInUp">
+                <h3>{{ _("No open positions right now") }}</h3>
+                <p>{{ _("We are not advertising any roles at the moment, but we are always glad to hear from good people.") }}</p>
+            </div>
+            <!-- Empty State End -->
+            {% endif %}
+
+            <!-- General Application CTA Start -->
+            <div class="careers-cta wow fadeInUp">
+                <div class="careers-cta-content">
+                    <h3>{{ _("Didn't find your role?") }}</h3>
+                    <p>{{ _("Send us your CV and we will keep you in mind for future openings.") }}</p>
+                </div>
+                <a href="{{ u('/careers/apply') }}" class="btn-default"><span>{{ _("send a general application") }}</span></a>
+            </div>
+            <!-- General Application CTA End -->
         </div>
     </div>
-    <!-- Careers Form Section End -->
+    <!-- Careers Listing End -->
 {% endblock %}

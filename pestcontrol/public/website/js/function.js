@@ -391,4 +391,58 @@
 			fixedContentPos: true,
 		});
 	}
+
+	/* Careers (job openings filtering) */
+	/*
+	 * Deliberately not isotope, unlike the blog and project grids above.
+	 * Those filter on one dimension through a CSS class; openings filter on
+	 * department AND location at once, and isotope's masonry layout here is
+	 * absolutely positioned with a left origin -- which lays out backwards
+	 * under dir="rtl". Plain show/hide keeps normal document flow, so RTL
+	 * needs no special casing, and it compares raw data- attribute values
+	 * rather than the hashed class names css_class_for has to produce for
+	 * arabic. With JS off, every card stays visible.
+	 */
+	if ($("[data-careers-grid]").length) {
+		var $careersGrid = $("[data-careers-grid]");
+		var $careersItems = $careersGrid.find(".careers-grid-item");
+		var $careersFilters = $("[data-careers-filter]");
+		var $careersCount = $("[data-careers-count]");
+		var $careersNoMatch = $("[data-careers-no-match]");
+
+		function applyCareersFilters() {
+			var active = {};
+			$careersFilters.each(function () {
+				var value = $(this).val();
+				if (value) {
+					active[$(this).attr("data-careers-filter")] = value;
+				}
+			});
+
+			var visible = 0;
+			$careersItems.each(function () {
+				var item = this;
+				var matches = Object.keys(active).every(function (key) {
+					return (item.dataset[key] || "") === active[key];
+				});
+				$(item).toggleClass("is-hidden", !matches);
+				if (matches) {
+					visible++;
+				}
+			});
+
+			if ($careersNoMatch.length) {
+				$careersNoMatch.prop("hidden", visible !== 0);
+			}
+			if ($careersCount.length) {
+				$careersCount.text(
+					($careersCount.attr("data-label-template") || "{n}").replace("{n}", visible)
+				);
+			}
+		}
+
+		$careersFilters.on("change", applyCareersFilters);
+		applyCareersFilters();
+	}
+
 })(jQuery);

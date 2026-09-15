@@ -83,7 +83,24 @@ website_generators = [
 # 301s for routes that have moved. Kept explicit rather than derived: a slug
 # only changes when someone renames a record, and the old URL has to keep
 # working for whatever already links to it.
-website_redirects = []
+website_redirects = [
+	# HRMS serves its own unbranded job board at /jobs, and openings used to
+	# live at jobs/<company>/<slug>. Both are superseded by the careers
+	# section; without these, search engines index two copies of every ad and
+	# the stock pages win on nothing but age.
+	#
+	# resolve_redirect runs *before* the language router, so it never sees a
+	# language and cannot add one. The prefixed variants therefore come
+	# first, so that an /en/... or /ar/... inbound link -- which is what the
+	# router itself emits -- resolves in a single hop. A bare /jobs/... costs
+	# two (here, then the router). No target matches any source, so no rule
+	# can loop. Patterns are $-anchored by resolve_redirect, so /jobseeker is
+	# untouched.
+	{"source": r"/(ar|en)/jobs/[^/]+/(.+)", "target": r"/\1/careers/\2"},
+	{"source": r"/jobs/[^/]+/(.+)", "target": r"/careers/\1"},
+	{"source": r"/(ar|en)/jobs(/.*)?", "target": r"/\1/careers"},
+	{"source": r"/jobs(/.*)?", "target": "/careers"},
+]
 
 # Fills in the search-engine metadata frappe does not derive on its own --
 # canonical, og:url/og:site_name/og:locale, robots -- and lets frappe's own
@@ -221,9 +238,14 @@ has_website_permission = {
 # ---------------
 # Override standard doctype classes
 
-# override_doctype_class = {
-# 	"ToDo": "custom_app.overrides.CustomToDo"
-# }
+# HRMS hard-codes both the website template and the route on the JobOpening
+# class itself, and neither is reachable from a hook. Subclassing is the
+# supported way in: PCJobOpening delegates to HRMS for every validation and
+# only changes where the public page is rendered from and what URL it gets.
+# Nothing in apps/hrms is modified. See pc_website/job_opening.py.
+override_doctype_class = {
+	"Job Opening": "pestcontrol.pc_website.job_opening.PCJobOpening",
+}
 
 # Session
 # ---------------

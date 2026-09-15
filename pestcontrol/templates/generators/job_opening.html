@@ -1,0 +1,81 @@
+{% extends "pestcontrol/templates/includes/website_base.html" %}
+
+{% block page_header %}
+    {% include "pestcontrol/templates/includes/page_header.html" %}
+{% endblock %}
+
+{% block content %}
+    <!-- Job Opening Single Start -->
+    <div class="page-single-post job-single">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <!-- Job Meta Start -->
+                    <div class="job-meta wow fadeInUp">
+                        {% if department_label %}
+                        <div class="job-meta-item">
+                            <span class="job-meta-label">{{ _("department") }}</span>
+                            <span class="job-meta-value">{{ _(department_label) }}</span>
+                        </div>
+                        {% endif %}
+                        {% if location_label %}
+                        <div class="job-meta-item">
+                            <span class="job-meta-label">{{ _("location") }}</span>
+                            <span class="job-meta-value">{{ _(location_label) }}</span>
+                        </div>
+                        {% endif %}
+                        {% if employment_type %}
+                        <div class="job-meta-item">
+                            <span class="job-meta-label">{{ _("employment type") }}</span>
+                            <span class="job-meta-value">{{ _(employment_type) }}</span>
+                        </div>
+                        {% endif %}
+                        {% if salary_display %}
+                        <div class="job-meta-item">
+                            <span class="job-meta-label">{{ _("salary range") }}</span>
+                            <span class="job-meta-value">{{ salary_display }}</span>
+                        </div>
+                        {% endif %}
+                        {% if closes_on_display %}
+                        <div class="job-meta-item">
+                            <span class="job-meta-label">{{ _("closes on") if is_open else _("closed on") }}</span>
+                            <span class="job-meta-value">{{ closes_on_display }}</span>
+                        </div>
+                        {% endif %}
+                        {% if no_of_applications is not none %}
+                        <div class="job-meta-item">
+                            <span class="job-meta-label">{{ _("applications received") }}</span>
+                            <span class="job-meta-value">{{ no_of_applications }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <!-- Job Meta End -->
+
+                    <!-- Job Content Start -->
+                    <div class="post-content">
+                        <div class="post-entry">
+                            {% if doc.description %}
+                            {{ doc.description }}
+                            {% else %}
+                            <p class="wow fadeInUp">{{ _("Full details for this role are available on request. Send us your application and we will be in touch.") }}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- Job Content End -->
+
+                    <!-- Apply Start -->
+                    <div class="job-apply wow fadeInUp">
+                        {% if is_open %}
+                        <a href="{{ u(apply_url) }}?job={{ doc.name | urlencode }}" class="btn-default"><span>{{ _("apply for this role") }}</span></a>
+                        {% else %}
+                        <p class="job-closed-notice">{{ _("This opening is closed and is no longer accepting applications.") }}</p>
+                        {% endif %}
+                        <a href="{{ u('/careers') }}" class="readmore-btn">{{ _("back to all openings") }}</a>
+                    </div>
+                    <!-- Apply End -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Job Opening Single End -->
+{% endblock %}
