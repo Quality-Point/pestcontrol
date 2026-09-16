@@ -101,9 +101,7 @@ class PCJobOpening(JobOpening):
 
 		context.title = self.job_title
 		context.page_h1 = self.job_title
-		context.description = strip_html(self.description or "")[:155].strip() or _(
-			"Job opening at Skystar."
-		)
+		context.description = strip_html(self.description or "")[:155].strip() or _("Job opening at Skystar.")
 		context.breadcrumbs = [
 			{"label": _("home"), "route": ""},
 			{"label": _("careers"), "route": ROUTE_PREFIX},
@@ -148,9 +146,7 @@ class PCJobOpening(JobOpening):
 		bounds = [
 			# _dict, not a plain dict: format_value only coerces a *string* df,
 			# and every branch below it uses attribute access.
-			frappe.format_value(
-				bound, frappe._dict(fieldtype="Currency", options="currency"), self
-			)
+			frappe.format_value(bound, frappe._dict(fieldtype="Currency", options="currency"), self)
 			for bound in (self.lower_range, self.upper_range)
 			if bound
 		]

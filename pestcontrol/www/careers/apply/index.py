@@ -33,9 +33,7 @@ def get_context(context):
 	# Applicant records, so these mirror that doctype's country / currency
 	# link targets.
 	context.countries = frappe.get_all("Country", pluck="name", order_by="name asc")
-	context.currencies = frappe.get_all(
-		"Currency", filters={"enabled": 1}, pluck="name", order_by="name asc"
-	)
+	context.currencies = frappe.get_all("Currency", filters={"enabled": 1}, pluck="name", order_by="name asc")
 	context.default_country = frappe.db.get_default("country") or "Saudi Arabia"
 	context.default_currency = _default_currency()
 

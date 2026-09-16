@@ -444,5 +444,4 @@
 		$careersFilters.on("change", applyCareersFilters);
 		applyCareersFilters();
 	}
-
 })(jQuery);

@@ -21,6 +21,7 @@ from pestcontrol.pc_website.api import _read_resume
 from pestcontrol.pc_website.job_opening import MAX_ROUTE_LENGTH
 
 TEST_DESIGNATION = "_Test Careers Designation"
+TEST_COMPANY = "_Test Careers Company"
 
 
 def _designation():
@@ -34,12 +35,40 @@ def _designation():
 	return TEST_DESIGNATION
 
 
+def _company():
+	"""A real Company name for the same reason _designation() exists:
+	get_active_staffing_plan_details's `company` parameter is also typed
+	`str`, so None blows up the same way.
+
+	frappe.defaults.get_global_default("company") is what the app itself uses
+	and is preferred here for the same value -- but it is a site setting, not
+	a guarantee, and a freshly bootstrapped CI site has no default company at
+	all. Fall back to any existing Company, and only create one when the site
+	genuinely has none."""
+	if default := frappe.defaults.get_global_default("company"):
+		return default
+	if existing := frappe.db.get_value("Company", {}, "name"):
+		return existing
+	if not frappe.db.exists("Company", TEST_COMPANY):
+		frappe.get_doc(
+			{
+				"doctype": "Company",
+				"company_name": TEST_COMPANY,
+				"abbr": "TCC",
+				"default_currency": "SAR",
+				"country": "Saudi Arabia",
+			}
+		).insert(ignore_permissions=True)
+	return TEST_COMPANY
+
+
 def _opening(job_title, **kwargs):
 	"""An unsaved Job Opening. Most cases call _careers_route() directly, so
-	they never touch the database; the two that do need a real designation."""
+	they never touch the database; the two that do need a real company and
+	designation."""
 	doc = frappe.new_doc("Job Opening")
 	doc.job_title = job_title
-	doc.company = frappe.defaults.get_global_default("company")
+	doc.company = _company()
 	doc.designation = _designation()
 	doc.status = "Open"
 	doc.update(kwargs)
