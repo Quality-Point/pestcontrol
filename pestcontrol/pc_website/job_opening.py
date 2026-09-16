@@ -3,7 +3,7 @@
 
 """Skystar's public face for HRMS `Job Opening`.
 
-Registered as `override_doctype_class`, which is the only way to reach two
+Registered as `extend_doctype_class`, which is the supported way to reach two
 things HRMS hard-codes on the class itself:
 
   * `website.template`. HRMS points at the bare path
@@ -17,8 +17,13 @@ things HRMS hard-codes on the class itself:
   * The route. HRMS builds `jobs/<company>/<job-title>`; the careers section
     owns these pages, so they belong under `careers/<job-title>`.
 
-Nothing in apps/hrms is modified. This subclasses JobOpening and delegates,
-so every HRMS validation still runs.
+`extend_doctype_class`, not `override_doctype_class`: frappe mixes this class
+in ahead of hrms's own JobOpening in the MRO (`_get_extended_class` in
+frappe/model/base_document.py), rather than swapping the controller wholesale
+-- so nothing else that might extend Job Opening in the future collides with
+this one, and every method not defined here still resolves to hrms's class
+untouched. Nothing in apps/hrms is modified. This subclasses JobOpening and
+delegates, so every HRMS validation still runs.
 
 HRMS's per-opening `job_application_route` (an override for where the Apply
 button points) is deliberately ignored: the site has one apply flow, through

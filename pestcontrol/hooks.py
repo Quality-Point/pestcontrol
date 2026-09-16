@@ -239,11 +239,14 @@ has_website_permission = {
 # Override standard doctype classes
 
 # HRMS hard-codes both the website template and the route on the JobOpening
-# class itself, and neither is reachable from a hook. Subclassing is the
-# supported way in: PCJobOpening delegates to HRMS for every validation and
-# only changes where the public page is rendered from and what URL it gets.
-# Nothing in apps/hrms is modified. See pc_website/job_opening.py.
-override_doctype_class = {
+# class itself, and neither is reachable from a hook. `extend_doctype_class`
+# (rather than `override_doctype_class`, which frappe's own semgrep rules
+# reject: only one app could ever claim it, and it breaks silently if hrms's
+# controller class ever moves) mixes PCJobOpening in ahead of hrms's own
+# JobOpening in the MRO, so every method PCJobOpening does not define -- every
+# HRMS validation -- still resolves to hrms's class untouched. Nothing in
+# apps/hrms is modified. See pc_website/job_opening.py.
+extend_doctype_class = {
 	"Job Opening": "pestcontrol.pc_website.job_opening.PCJobOpening",
 }
 

@@ -44,14 +44,6 @@ APPLICANT_STAGES = {
 # the doctype's own options so that upgrade fails loudly instead.
 DEFAULT_STAGE = "received"
 
-STAGE_LABELS = {
-	"received": lambda: _("Received"),
-	"under_review": lambda: _("Under review"),
-	"shortlisted": lambda: _("Shortlisted"),
-	"closed": lambda: _("Closed"),
-	"accepted": lambda: _("Accepted"),
-}
-
 MAX_APPLICATIONS = 50
 
 
@@ -60,9 +52,23 @@ def stage_for(status):
 
 
 def stage_label(stage):
-	"""Translated label. The lambdas exist so `_()` is called per request,
-	under the active language, rather than once at import."""
-	return STAGE_LABELS.get(stage, STAGE_LABELS[DEFAULT_STAGE])()
+	"""Translated label for a stage.
+
+	Built inside the function rather than as a module-level dict: a bench
+	worker serves every site out of the same process, and `_()` resolves
+	against whichever site is active on the current request. A dict built at
+	import time would bake in whichever site happened to import this module
+	first; building it fresh here means each call resolves under its own
+	request's language.
+	"""
+	labels = {
+		"received": _("Received"),
+		"under_review": _("Under review"),
+		"shortlisted": _("Shortlisted"),
+		"closed": _("Closed"),
+		"accepted": _("Accepted"),
+	}
+	return labels.get(stage, labels[DEFAULT_STAGE])
 
 
 def get_my_applications():
