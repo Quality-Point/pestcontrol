@@ -1,5 +1,6 @@
 from frappe.sessions import get_csrf_token
 
+from pestcontrol.pc_website.applications import get_my_applications_json
 from pestcontrol.pc_website.utils import portal_user_info
 
 # This file exists because frappe resolves a www page's python controller from
@@ -22,4 +23,9 @@ no_cache = 1
 def get_context(context, **dict_params):
 	context.me = portal_user_info()
 	context.csrf_token = get_csrf_token()
+	# The signed-in visitor's own job applications, for the Overview card.
+	# Empty string for a guest and for anyone who has never applied, which is
+	# what keeps the card off almost every customer's dashboard. Scoped by
+	# `owner` inside -- see pc_website/applications.py.
+	context.applications_json = get_my_applications_json()
 	return context

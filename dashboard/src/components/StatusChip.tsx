@@ -1,6 +1,8 @@
 import { Chip } from '@mui/material';
 
-const STATUS_COLOR: Record<string, 'success' | 'error' | 'warning' | 'default'> = {
+export type ChipColor = 'success' | 'error' | 'warning' | 'info' | 'primary' | 'default';
+
+const STATUS_COLOR: Record<string, ChipColor> = {
 	Paid: 'success',
 	Completed: 'success',
 	Closed: 'success',
@@ -12,8 +14,12 @@ const STATUS_COLOR: Record<string, 'success' | 'error' | 'warning' | 'default'> 
 	Unpaid: 'warning'
 };
 
-export default function StatusChip({ status }: { status?: string }) {
+// `color` overrides the lookup. Job applications need it for two reasons:
+// their label arrives already translated, so an english-keyed map would miss
+// entirely in arabic, and their "Closed" means the opposite of the entry
+// above — a Sales Invoice that is Closed is done, an application that is
+// Closed is not good news, so it must not be green.
+export default function StatusChip({ status, color }: { status?: string; color?: ChipColor }) {
 	if (!status) return null;
-	const color = STATUS_COLOR[status] ?? 'default';
-	return <Chip label={status} color={color} size="small" />;
+	return <Chip label={status} color={color ?? STATUS_COLOR[status] ?? 'default'} size="small" />;
 }

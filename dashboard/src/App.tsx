@@ -32,7 +32,7 @@ import Overview from './pages/Overview';
 import PortalDocumentList from './components/PortalDocumentList';
 import DocumentDetail from './pages/DocumentDetail';
 import AccountPage from './pages/AccountPage';
-import type { PortalListRow } from './api/portal';
+import type { JobApplication, PortalListRow } from './api/portal';
 
 export type PageType = 'overview' | 'list' | 'detail' | 'account';
 
@@ -47,6 +47,7 @@ interface AppProps {
 	printFormat?: string;
 	listRows: PortalListRow[];
 	detailDoc?: Record<string, unknown>;
+	applications: JobApplication[];
 	account: {
 		fullName?: string;
 		email?: string;
@@ -176,7 +177,9 @@ function DashboardShell(props: AppProps) {
 				}}
 			>
 				<Toolbar />
-				{props.pageType === 'overview' && <Overview lang={props.lang} />}
+				{props.pageType === 'overview' && (
+					<Overview lang={props.lang} applications={props.applications} />
+				)}
 				{props.pageType === 'list' && listMeta && (
 					<PortalDocumentList
 						rows={props.listRows}

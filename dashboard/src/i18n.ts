@@ -27,7 +27,13 @@ const strings = {
 		myAccountTitle: 'My Account',
 		editProfile: 'Edit Profile',
 		resetPassword: 'Reset Password',
-		logout: 'Logout'
+		logout: 'Logout',
+		// Only the heading and the row label. The stage itself ("Received",
+		// "Under review", ...) is computed and translated server-side in
+		// pc_website/applications.py, so it arrives ready to render — the raw
+		// HRMS status deliberately never reaches the browser.
+		myApplications: 'My Applications',
+		appliedOn: 'Applied'
 	},
 	ar: {
 		appTitle: 'لوحتي',
@@ -48,7 +54,9 @@ const strings = {
 		myAccountTitle: 'حسابي',
 		editProfile: 'تعديل الملف الشخصي',
 		resetPassword: 'إعادة تعيين كلمة المرور',
-		logout: 'تسجيل الخروج'
+		logout: 'تسجيل الخروج',
+		myApplications: 'طلبات التوظيف',
+		appliedOn: 'تم التقديم'
 	}
 } as const;
 

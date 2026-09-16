@@ -557,3 +557,9 @@ Your application has been submitted successfully.,تم إرسال طلبك بن�
 You have already applied for this position.,لقد تقدمت بالفعل لهذه الوظيفة.
 Cannot create a Job Applicant against a closed Job Opening,لا يمكن إنشاء طلب توظيف لوظيفة مغلقة
 Duplicate Application,طلب مكرر
+Received,تم الاستلام
+Under review,قيد المراجعة
+Shortlisted,في القائمة المختصرة
+Closed,مغلق
+Accepted,مقبول
+General application,طلب توظيف عام
