@@ -50,15 +50,27 @@ def _company():
 	if existing := frappe.db.get_value("Company", {}, "name"):
 		return existing
 	if not frappe.db.exists("Company", TEST_COMPANY):
-		frappe.get_doc(
-			{
-				"doctype": "Company",
-				"company_name": TEST_COMPANY,
-				"abbr": "TCC",
-				"default_currency": "SAR",
-				"country": "Saudi Arabia",
-			}
-		).insert(ignore_permissions=True)
+		# Company.on_update creates a chart of accounts and a default
+		# warehouse set unless told not to -- and the warehouse for "Goods In
+		# Transit" links a Warehouse Type ("Transit") that only exists once
+		# ERPNext's setup wizard has run. A bare test site never runs it, so
+		# that insert throws LinkValidationError and takes this whole helper
+		# down with it. All that is actually needed here is a Company row to
+		# satisfy Job Opening.company's own Link validation -- the flag skips
+		# the entire chart-of-accounts/warehouse branch in on_update.
+		frappe.local.flags.ignore_chart_of_accounts = True
+		try:
+			frappe.get_doc(
+				{
+					"doctype": "Company",
+					"company_name": TEST_COMPANY,
+					"abbr": "TCC",
+					"default_currency": "SAR",
+					"country": "Saudi Arabia",
+				}
+			).insert(ignore_permissions=True)
+		finally:
+			frappe.local.flags.ignore_chart_of_accounts = False
 	return TEST_COMPANY
 
 
