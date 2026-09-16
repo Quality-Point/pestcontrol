@@ -4789,6 +4789,20 @@ header.main-header .header-sticky.active{
         margin-right: 0;
     }
 
+    /* Touch devices never fire :hover, so the title stayed hidden forever.
+       Force it to its revealed state, including the darkening overlay it
+       relies on for contrast against the image. */
+    .project-item::before{
+        top: 0;
+        opacity: 60%;
+    }
+
+    .project-content{
+        transform: translateY(50%);
+        opacity: 1;
+        visibility: visible;
+    }
+
     .cta-box-body ul li{
         padding-left: 25px;
         margin-bottom: 10px;

@@ -63,13 +63,14 @@
   {
    "fieldname": "message",
    "fieldtype": "Text",
-   "label": "Message"
+   "label": "Message",
+   "reqd": 1
   }
  ],
  "grid_page_length": 50,
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2026-09-10 11:49:09.327541",
+ "modified": "2026-09-16 15:52:39.956034",
  "modified_by": "Administrator",
  "module": "PC Website",
  "name": "Website Contact Message",

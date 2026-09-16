@@ -769,13 +769,13 @@
     <!-- Our Testimonials Section End -->
 
     <!-- CTA Box Section Start -->
-    <div class="cta-box dark-section parallaxie">
+    <div class="cta-box dark-section parallaxie"{% if settings.cta_box_background_image %} style="background-image: url('{{ settings.cta_box_background_image }}');"{% endif %}>
         <div class="container">
             <div class="row">
                 <div class="col-lg-7 col-md-6 order-md-1 order-2">
                     <!-- CTA Box Image Start -->
                     <div class="cta-box-image">
-                        <img src="/assets/pestcontrol/website/images/cta-box-real.webp" alt="{{ _('Skystar technician ready for a scheduled pest control visit') }}" loading="lazy" decoding="async">
+                        <img src="{{ settings.cta_box_image or '/assets/pestcontrol/website/images/cta-box-real.webp' }}" alt="{{ _('Skystar technician ready for a scheduled pest control visit') }}" loading="lazy" decoding="async">
                     </div>
                     <!-- CTA Box Image End -->
                 </div>
@@ -792,9 +792,9 @@
                         <!-- Cta Box Body Start -->
                         <div class="cta-box-body wow fadeInUp">
                             <ul>
-                                <li>{{ _("Schedule Your Free Inspection") }}</li>
-                                <li>{{ _("Prevent Future Infestations") }}</li>
-                                <li>{{ _("Simple and Fast Booking") }}</li>
+                                {% for item in cta_benefits %}
+                                <li>{{ localize(item, "title") }}</li>
+                                {% endfor %}
                             </ul>
                         </div>
                         <!-- Cta Box Body End -->
