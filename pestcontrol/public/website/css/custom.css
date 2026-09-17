@@ -4356,12 +4356,29 @@ header.main-header .header-sticky.active{
 }
 
 .contact-us-form,
-.contact-us-image{
+.contact-us-text{
     width: 50%;
 }
 
 .contact-us-form{
     padding: 40px;
+}
+
+.contact-us-text{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 40px;
+    background-color: var(--primary-color);
+}
+
+.contact-us-text h3{
+    color: var(--white-color);
+    margin-bottom: 15px;
+}
+
+.contact-us-text p{
+    color: var(--white-color);
 }
 
 .contact-form .form-control{
@@ -4379,18 +4396,6 @@ header.main-header .header-sticky.active{
 
 .contact-form .form-control::placeholder{
     color: var(--text-color);
-}
-
-.contact-us-image figure{
-    display: block;
-    height: 100%;
-}
-
-.contact-us-image img{
-    height: 100%;
-    width: 100%;
-    aspect-ratio: 1 / 0.99;
-    object-fit: cover;
 }
 
 .google-map .container-fluid{
@@ -5357,24 +5362,13 @@ header.main-header .header-sticky.active{
     }
 
     .contact-us-form,
-    .contact-us-image{
+    .contact-us-text{
         width: 100%;
-    }
-
-    .contact-us-form{
         padding: 30px;
     }
 
     .contact-form .form-control{
         padding: 12px 15px;
-    }
-
-	.contact-us-image figure{
-		height: auto;
-	}
-
-    .contact-us-image img{
-        aspect-ratio: 1 / 0.7;
     }
 
     .google-map-iframe,
@@ -5968,12 +5962,9 @@ header.main-header .header-sticky.active{
         font-size: 18px;
     }
 
-    .contact-us-form{
+    .contact-us-form,
+    .contact-us-text{
         padding: 20px;
-    }
-
-    .contact-us-image img{
-        aspect-ratio: 1 / 0.85;
     }
 
     .google-map-iframe,
