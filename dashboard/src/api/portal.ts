@@ -1,5 +1,5 @@
 // One row of the signed-in user's own job applications, embedded server-side
-// by pestcontrol/www/portal.py. Deliberately carries `stage`/`stage_label`
+// by pestcontrol/www/my-jobs/index.py. Deliberately carries `stage`/`stage_label`
 // and NOT the raw HRMS status: "Rejected" and "Hold" both arrive as the
 // "closed" stage, and the real word never reaches the browser.
 export interface JobApplication {

@@ -29,17 +29,6 @@
   {% if doctype %}
   <script id="portal-data" type="application/json">{{ raw_result }}</script>
   {% endif %}
-  {#
-    Kept separate from portal-data above rather than folded into it: that
-    block belongs to the list routes, whose context comes from frappe's own
-    portal.py, and this one only ever exists on the Overview. `is defined`
-    rather than a bare truthiness test - frappe's jinja uses DebugUndefined,
-    which is falsy but renders as the undefined variable's own name if it
-    ever reaches output.
-  #}
-  {% if applications_json is defined and applications_json %}
-  <script id="portal-applications" type="application/json">{{ applications_json }}</script>
-  {% endif %}
 </body>
 
 </html>

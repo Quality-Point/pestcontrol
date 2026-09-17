@@ -13,6 +13,7 @@ const strings = {
 		navOrders: 'Orders',
 		navQuotations: 'Quotations',
 		navInvoices: 'Invoices',
+		navMyJobs: 'My Jobs',
 		navAccount: 'My Account',
 		homeTooltip: 'Back to site',
 		accountTooltip: 'My Account',
@@ -28,12 +29,12 @@ const strings = {
 		editProfile: 'Edit Profile',
 		resetPassword: 'Reset Password',
 		logout: 'Logout',
-		// Only the heading and the row label. The stage itself ("Received",
-		// "Under review", ...) is computed and translated server-side in
+		// Only the row label — the stage itself ("Received", "Under review",
+		// ...) is computed and translated server-side in
 		// pc_website/applications.py, so it arrives ready to render — the raw
 		// HRMS status deliberately never reaches the browser.
-		myApplications: 'My Applications',
-		appliedOn: 'Applied'
+		appliedOn: 'Applied',
+		noApplicationsYet: "You haven't applied to any jobs yet."
 	},
 	ar: {
 		appTitle: 'لوحتي',
@@ -41,6 +42,7 @@ const strings = {
 		navOrders: 'الطلبات',
 		navQuotations: 'عروض الأسعار',
 		navInvoices: 'الفواتير',
+		navMyJobs: 'وظائفي',
 		navAccount: 'حسابي',
 		homeTooltip: 'العودة للموقع',
 		accountTooltip: 'حسابي',
@@ -55,8 +57,8 @@ const strings = {
 		editProfile: 'تعديل الملف الشخصي',
 		resetPassword: 'إعادة تعيين كلمة المرور',
 		logout: 'تسجيل الخروج',
-		myApplications: 'طلبات التوظيف',
-		appliedOn: 'تم التقديم'
+		appliedOn: 'تم التقديم',
+		noApplicationsYet: 'لم تتقدم لأي وظيفة بعد.'
 	}
 } as const;
 

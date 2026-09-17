@@ -17,7 +17,7 @@ if (rootEl) {
 	const dataEl = document.getElementById('portal-data');
 	const embedded = dataEl?.textContent ? JSON.parse(dataEl.textContent) : undefined;
 
-	// Its own block, written only on the Overview by pestcontrol's portal.py.
+	// Its own block, written only on /my-jobs by pestcontrol's my-jobs/index.py.
 	// Absent for guests and for anyone who has never applied.
 	const applicationsEl = document.getElementById('portal-applications');
 	const applications: JobApplication[] = applicationsEl?.textContent

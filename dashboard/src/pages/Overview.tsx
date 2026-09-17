@@ -1,25 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Box, Card, CardContent, Typography, Grid, Skeleton, Divider, Link, Stack } from '@mui/material';
+import { Box, Card, CardContent, Typography, Grid, Skeleton } from '@mui/material';
 import { PieChart } from '@mui/x-charts/PieChart';
 import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import DescriptionIcon from '@mui/icons-material/Description';
-import { fetchPortalRows, type JobApplication, type PortalListRow } from '../api/portal';
-import StatusChip, { type ChipColor } from '../components/StatusChip';
+import { fetchPortalRows, type PortalListRow } from '../api/portal';
 import { t, type Lang } from '../i18n';
-
-// Keyed on the stable `stage` the server sends, never on the label — the
-// label is already translated, so an english-keyed map would fall through to
-// grey for every arabic reader. `closed` stays grey rather than red: it
-// covers HRMS's "Hold" as well as "Rejected", and a red chip would announce
-// a rejection the applicant has not been told about.
-const STAGE_COLOR: Record<string, ChipColor> = {
-	received: 'default',
-	under_review: 'info',
-	shortlisted: 'primary',
-	closed: 'default',
-	accepted: 'success'
-};
 
 function StatCard({
 	icon,
@@ -61,67 +47,7 @@ function StatCard({
 	);
 }
 
-function ApplicationsCard({ applications, lang }: { applications: JobApplication[]; lang: Lang }) {
-	const s = t(lang);
-	// Rendered only when there is something in it: the portal's audience is
-	// pest-control customers, and an empty "My Applications" card on every
-	// one of their dashboards would be noise.
-	if (!applications.length) return null;
-
-	const dateFormat = new Intl.DateTimeFormat(lang === 'ar' ? 'ar' : 'en-GB', {
-		day: 'numeric',
-		month: 'short',
-		year: 'numeric'
-	});
-
-	return (
-		<Card sx={{ mt: 3 }}>
-			<CardContent>
-				<Typography variant="h6" sx={{ mb: 2 }}>
-					{s.myApplications}
-				</Typography>
-				{applications.map((application, index) => (
-					<Box key={application.name}>
-						{index > 0 && <Divider sx={{ my: 1.5 }} />}
-						<Stack
-							direction={{ xs: 'column', sm: 'row' }}
-							sx={{ alignItems: { sm: 'center' }, gap: 1 }}
-						>
-							<Box sx={{ flexGrow: 1, minWidth: 0 }}>
-								<Typography variant="subtitle1">
-									{application.job_url ? (
-										<Link href={application.job_url} underline="hover" color="inherit">
-											{application.title}
-										</Link>
-									) : (
-										application.title
-									)}
-								</Typography>
-								{application.applied_on && (
-									<Typography variant="body2" color="text.secondary">
-										{s.appliedOn} {dateFormat.format(new Date(application.applied_on))}
-									</Typography>
-								)}
-							</Box>
-							<StatusChip
-								status={application.stage_label}
-								color={STAGE_COLOR[application.stage] ?? 'default'}
-							/>
-						</Stack>
-					</Box>
-				))}
-			</CardContent>
-		</Card>
-	);
-}
-
-export default function Overview({
-	lang,
-	applications
-}: {
-	lang: Lang;
-	applications: JobApplication[];
-}) {
+export default function Overview({ lang }: { lang: Lang }) {
 	const s = t(lang);
 	const [orders, setOrders] = useState<PortalListRow[]>([]);
 	const [quotations, setQuotations] = useState<PortalListRow[]>([]);
@@ -192,8 +118,6 @@ export default function Overview({
 					)}
 				</CardContent>
 			</Card>
-
-			<ApplicationsCard applications={applications} lang={lang} />
 		</Box>
 	);
 }

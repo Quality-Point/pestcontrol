@@ -24,6 +24,7 @@ import ReceiptLongIcon from '@mui/icons-material/ReceiptLong';
 import RequestQuoteIcon from '@mui/icons-material/RequestQuote';
 import DescriptionIcon from '@mui/icons-material/Description';
 import PersonIcon from '@mui/icons-material/Person';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import { createDashboardTheme } from './theme';
 import { createEmotionCache } from './emotionCache';
 import { getInitials } from './utils/initials';
@@ -32,9 +33,10 @@ import Overview from './pages/Overview';
 import PortalDocumentList from './components/PortalDocumentList';
 import DocumentDetail from './pages/DocumentDetail';
 import AccountPage from './pages/AccountPage';
+import MyJobsPage from './pages/MyJobsPage';
 import type { JobApplication, PortalListRow } from './api/portal';
 
-export type PageType = 'overview' | 'list' | 'detail' | 'account';
+export type PageType = 'overview' | 'list' | 'detail' | 'account' | 'applications';
 
 const DRAWER_WIDTH = 260;
 
@@ -76,6 +78,7 @@ function DashboardShell(props: AppProps) {
 		{ href: '/orders', label: s.navOrders, icon: <ReceiptLongIcon /> },
 		{ href: '/quotations', label: s.navQuotations, icon: <RequestQuoteIcon /> },
 		{ href: '/invoices', label: s.navInvoices, icon: <DescriptionIcon /> },
+		{ href: '/my-jobs', label: s.navMyJobs, icon: <WorkOutlineIcon /> },
 		{ href: '/me', label: s.navAccount, icon: <PersonIcon /> }
 	];
 
@@ -177,9 +180,7 @@ function DashboardShell(props: AppProps) {
 				}}
 			>
 				<Toolbar />
-				{props.pageType === 'overview' && (
-					<Overview lang={props.lang} applications={props.applications} />
-				)}
+				{props.pageType === 'overview' && <Overview lang={props.lang} />}
 				{props.pageType === 'list' && listMeta && (
 					<PortalDocumentList
 						rows={props.listRows}
@@ -197,6 +198,9 @@ function DashboardShell(props: AppProps) {
 					/>
 				)}
 				{props.pageType === 'account' && <AccountPage {...props.account} lang={props.lang} />}
+				{props.pageType === 'applications' && (
+					<MyJobsPage applications={props.applications} lang={props.lang} />
+				)}
 			</Box>
 		</Box>
 	);
