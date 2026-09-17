@@ -65,6 +65,11 @@ def get_website_context(context):
 	# session token at all, which stays true as long as we don't touch it here.
 	context.csrf_token = frappe.local.session.data.csrf_token if frappe.session.user != "Guest" else ""
 	context.is_logged_in = frappe.session.user != "Guest"
+	# "Website User" is the type given to portal/customer signups (see
+	# pc_website/api.py's register_account); everyone else (Administrator,
+	# staff System Users) belongs in the desk, not the customer portal --
+	# same distinction /account/login already redirects on.
+	context.is_website_user = context.is_logged_in and frappe.session.data.user_type == "Website User"
 	# session.data.full_name isn't reliably populated depending on how the
 	# session was created (e.g. straight through /api/method/login) — look
 	# it up directly from the User doc instead, which is always accurate.

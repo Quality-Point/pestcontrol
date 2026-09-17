@@ -174,6 +174,7 @@
                     form.reportValidity();
                     return;
                 }
+                var genericError = {{ _("Something went wrong. Please try again.") | tojson }};
                 var formData = new FormData(form);
                 fetch("/api/method/pestcontrol.pc_website.api.submit_job_application", {
                     method: "POST",
@@ -181,22 +182,42 @@
                     headers: { "X-Frappe-CSRF-Token": "{{ csrf_token }}" },
                 })
                     .then(function (response) {
-                        if (!response.ok) throw new Error("Request failed");
-                        return response.json();
+                        return response.json().then(function (data) {
+                            if (!response.ok) {
+                                // frappe.throw puts its message -- already
+                                // translated -- in _server_messages, as a JSON
+                                // string of JSON strings. "You have already
+                                // applied for this position." arrives here, and
+                                // is far more use than a generic failure.
+                                var serverMessage = "";
+                                try {
+                                    var messages = JSON.parse(data._server_messages || "[]");
+                                    if (messages.length) {
+                                        serverMessage = JSON.parse(messages[messages.length - 1]).message;
+                                    }
+                                } catch (parseError) {
+                                    serverMessage = "";
+                                }
+                                throw new Error(serverMessage || genericError);
+                            }
+                            return data;
+                        });
                     })
                     .then(function () {
                         if (msgBox) {
-                            msgBox.classList.remove("hidden");
+                            msgBox.classList.remove("hidden", "text-danger");
                             msgBox.classList.add("text-success");
-                            msgBox.textContent = "Your application has been submitted successfully.";
+                            // textContent, so any markup frappe wrapped the
+                            // message in shows as text rather than rendering.
+                            msgBox.textContent = {{ _("Your application has been submitted successfully.") | tojson }};
                         }
                         form.reset();
                     })
-                    .catch(function () {
+                    .catch(function (err) {
                         if (msgBox) {
-                            msgBox.classList.remove("hidden");
+                            msgBox.classList.remove("hidden", "text-success");
                             msgBox.classList.add("text-danger");
-                            msgBox.textContent = "Something went wrong. Please try again.";
+                            msgBox.textContent = err.message || genericError;
                         }
                     });
             });

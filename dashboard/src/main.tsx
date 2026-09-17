@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App, { type PageType } from './App';
-import type { PortalListRow } from './api/portal';
+import type { JobApplication, PortalListRow } from './api/portal';
 import type { Lang } from './i18n';
 
 const rootEl = document.getElementById('root');
@@ -16,6 +16,13 @@ if (rootEl) {
 
 	const dataEl = document.getElementById('portal-data');
 	const embedded = dataEl?.textContent ? JSON.parse(dataEl.textContent) : undefined;
+
+	// Its own block, written only on /my-jobs by pestcontrol's my-jobs/index.py.
+	// Absent for guests and for anyone who has never applied.
+	const applicationsEl = document.getElementById('portal-applications');
+	const applications: JobApplication[] = applicationsEl?.textContent
+		? JSON.parse(applicationsEl.textContent)
+		: [];
 
 	const listRows: PortalListRow[] = pageType === 'list' && Array.isArray(embedded) ? embedded : [];
 	const detailDoc: Record<string, unknown> | undefined =
@@ -32,6 +39,7 @@ if (rootEl) {
 				printFormat={printFormat}
 				listRows={listRows}
 				detailDoc={detailDoc}
+				applications={applications}
 				account={{
 					fullName: rootEl.dataset.fullName,
 					email: rootEl.dataset.email,

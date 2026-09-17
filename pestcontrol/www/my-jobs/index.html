@@ -1,0 +1,29 @@
+<!--
+  Standalone page for the signed-in visitor's own job applications. Used to
+  be a card on portal.html's Overview; moved here so the sidebar nav item is
+  its own page like Orders/Quotations/Invoices/My Account, instead of a
+  section buried inside Overview.
+-->
+<!doctype html>
+<html lang="{{ current_lang() }}" dir="{{ 'rtl' if is_rtl() else 'ltr' }}">
+
+<head>
+  {% include "templates/includes/dashboard_assets.html" %}
+  <title>My Jobs | Sky Star</title>
+</head>
+
+<body>
+  <div
+    id="root"
+    data-page-type="applications"
+    data-lang="{{ current_lang() }}"
+    data-full-name="{{ me.full_name }}"
+    data-email="{{ me.email }}"
+    {% if me.user_image %}data-avatar-url="{{ me.user_image }}"{% endif %}
+  ></div>
+  {% if applications_json is defined and applications_json %}
+  <script id="portal-applications" type="application/json">{{ applications_json }}</script>
+  {% endif %}
+</body>
+
+</html>

@@ -75,6 +75,7 @@ Duration :,المدة :
 E-mail,البريد الإلكتروني
 Eco-Friendly,صديق للبيئة
 Eco-Friendly Approach,نهج صديق للبيئة
+"Eco-Friendly, Family-Safe Treatments",معالجات صديقة للبيئة وآمنة على الأسرة
 Eco-Friendly Approaches to Effective Pest Management,نهج صديق للبيئة لإدارة فعالة للآفات
 Eco-Friendly Pest,آفات صديقة للبيئة
 Eco-Friendly approach,نهج صديق للبيئة
@@ -101,7 +102,9 @@ Expertise You Can Trust,خبرة يمكنكم الوثوق بها
 Explore our proven track record of,استكشفوا سجلنا الحافل والمثبت في
 "Explore Skystar's full range of pest control and environmental services, from termite and rodent treatment to commercial contracts and preventive programmes.",استكشف خدمات سكاي ستار المتكاملة لمكافحة الحشرات والخدمات البيئية، من معالجة النمل الأبيض والقوارض إلى العقود التجارية والبرامج الوقائية.
 FAQs,الأسئلة الشائعة
+"Fast Response, Guaranteed Results",استجابة سريعة ونتائج مضمونة
 Fast Response Times,أوقات استجابة سريعة
+"Fast response, certified technicians, and eco-friendly treatments — trusted by homes and businesses across Saudi Arabia to solve pest problems for good.",استجابة سريعة، وفنيون معتمدون، ومعالجات صديقة للبيئة — موثوقون من قبل المنازل والشركات في جميع أنحاء المملكة العربية السعودية لحل مشكلات الآفات نهائيًا.
 Find helpful answers to your pest,اعثروا على إجابات مفيدة لأسئلتكم حول الآفات
 "Find your nearest Skystar branch. Addresses, phone numbers and service areas across Saudi Arabia.",اعثر على أقرب فرع لسكاي ستار. العناوين وأرقام الهواتف ومناطق الخدمة في جميع أنحاء المملكة العربية السعودية.
 First name,الاسم الأول
@@ -125,6 +128,7 @@ Image Gallery,معرض الصور
 Last name,اسم العائلة
 Latest blog,أحدث المقالات
 "Learn about Skystar, our licensed pest control team, our eco-friendly methods and our commitment to protecting homes and businesses across Saudi Arabia.",تعرّف على سكاي ستار، فريقنا المرخّص لمكافحة الحشرات، وأساليبنا الصديقة للبيئة، والتزامنا بحماية المنازل والمنشآت في جميع أنحاء المملكة العربية السعودية.
+"Licensed & Certified Technicians",فنيون مرخصون ومعتمدون
 Let's create a pest-free environment -,لنصنع معًا بيئة خالية من الآفات -
 Let's talk about your,لنتحدث عن
 Links,روابط
@@ -252,6 +256,7 @@ We stand behind our service with a satisfaction guarante.,نقف خلف خدمت
 "We understand how frustrating and disruptive pests can be, which is why we're committed to providing fast, reliable, and effective solutions. With a team of certified experts, eco-friendly methods, and unmatched customer care.",ندرك مدى الإزعاج والاضطراب الذي قد تسببه الآفات، لذا نلتزم بتقديم حلول سريعة وموثوقة وفعالة. مع فريق من الخبراء المعتمدين وطرق صديقة للبيئة ورعاية عملاء لا مثيل لها.
 "We understand that every home is different, and so are the pest problems it may face. That's why our expert team conducts thorough.",ندرك أن كل منزل مختلف، وكذلك مشكلات الآفات التي قد يواجهها. لهذا يجري فريقنا الخبير فحصًا شاملاً.
 What drives us,ما الذي يحركنا
+Why Choose,لماذا تختار
 What makes us the best,ما الذي يجعلنا الأفضل
 What should I expect during my first visit?,ماذا يجب أن أتوقع خلال زيارتي الأولى؟
 What types of treatments do you offer?,ما أنواع العلاجات التي تقدمونها؟
@@ -491,3 +496,75 @@ Full-bleed background photo behind the login / sign up forms.,صورة خلفي�
 Team Size,حجم الفريق
 Satisfaction Rate (%),معدل الرضا (%)
 Years Experience,سنوات الخبرة
+Language served at the site root and used as the hreflang x-default. Set this instead of hardcoding a language anywhere.,اللغة المستخدمة في جذر الموقع وتستخدم كلغة افتراضية. قم بتعيين هذا بدلاً من ترميز اللغة في أي مكان.
+Default Language,اللغة الافتراضية
+X (Twitter) Handle,معرف X (تويتر)
+Canonical Base URL,عنوان URL الأساسي القانوني
+Google Business Profile URL,عنوان URL لملف تعريف Google للأعمال
+Links the site to your Google listing in structured data. Important for local search.,يربط الموقع بقائمتك على Google في البيانات المنظمة. مهم للبحث المحلي.
+Used when a page has no image of its own. 1200x630 works best.,يُستخدم عندما لا تحتوي الصفحة على صورة خاصة بها. أفضل حجم هو 1200x630.
+Looks like G-XXXXXXXXXX. Leave blank to disable analytics.,يبدو مثل G-XXXXXXXXXX. اتركه فارغًا لتعطيل التحليلات.
+The content value of the google-site-verification meta tag.,قيمة المحتوى لعلامة meta لتحقق google.
+Looks like GTM-XXXXXXX. Takes precedence over the GA4 ID if both are set.,يبدو مثل GTM-XXXXXXX. له الأولوية على معرف GA4 إذا تم تعيين كلاهما.
+Used to build the structured data that search engines read about the company.,يُستخدم لبناء البيانات المنظمة التي تقرأها محركات البحث حول الشركة.
+Business Details,تفاصيل العمل
+Founding Year,سنة التأسيس
+Commercial Registration No.,رقم السجل التجاري
+Price Range,نطاق الأسعار
+VAT Number,رقم ضريبة القيمة المضافة
+Article,مقال
+Search Engines,محركات البحث
+Default Share Image,صورة المشاركة الافتراضية
+Google Search Console Token,رمز Google Search Console
+Analytics & Verification,التحليلات والتحقق
+GA4 Measurement ID,معرف قياس GA4
+Bing Verification Token,رمز التحقق من Bing
+Google Tag Manager ID,معرف Google Tag Manager
+Legal Name,الاسم القانوني
+Rough price bracket shown in local search results, e.g. $$.,نطاق السعر التقريبي المعروض في نتائج البحث المحلية، على سبيل المثال $$.
+Favicon,أيقونة الموقع
+Page Header Background,خلفية رأس الصفحة
+Google Maps Embed URL,عنوان URL لتضمين خرائط Google
+Phone Numbers,أرقام الهواتف
+Instagram URL,عنوان URL لإنستغرام
+Facebook URL,عنوان URL لفيسبوك
+department,القسم
+employment type,نوع التوظيف
+salary range,نطاق الراتب
+closes on,يغلق في
+closed on,أُغلق في
+applications received,الطلبات المستلمة
+all departments,كل الأقسام
+all locations,كل المواقع
+Open positions: {n},الوظائف الشاغرة: {n}
+view details,عرض التفاصيل
+No openings match the filters you selected.,لا توجد وظائف مطابقة للفلاتر التي اخترتها.
+No open positions right now,لا توجد وظائف شاغرة حالياً
+"We are not advertising any roles at the moment, but we are always glad to hear from good people.",لا نعلن عن أي وظائف في الوقت الحالي، لكن يسعدنا دائماً التواصل مع الكفاءات المتميزة.
+Didn't find your role?,لم تجد الوظيفة المناسبة؟
+Send us your CV and we will keep you in mind for future openings.,أرسل لنا سيرتك الذاتية وسنأخذها بعين الاعتبار في الشواغر القادمة.
+send a general application,إرسال طلب توظيف عام
+apply for this role,التقديم على هذه الوظيفة
+back to all openings,العودة إلى جميع الوظائف
+This opening is closed and is no longer accepting applications.,هذه الوظيفة مغلقة ولم تعد تستقبل طلبات التوظيف.
+Full details for this role are available on request. Send us your application and we will be in touch.,تفاصيل هذه الوظيفة متاحة عند الطلب. أرسل طلبك وسنتواصل معك.
+Job opening at Skystar.,وظيفة شاغرة في سكاي ستار.
+Apply,التقديم
+Apply to join the Skystar team.,قدّم للانضمام إلى فريق سكاي ستار.
+apply,التقديم
+choose a different role,اختيار وظيفة أخرى
+That opening is no longer accepting applications. You can still send us a general application below.,لم تعد هذه الوظيفة تستقبل الطلبات. لا يزال بإمكانك إرسال طلب توظيف عام أدناه.
+Please attach your resume as a PDF or Word document.,يرجى إرفاق سيرتك الذاتية بصيغة PDF أو Word.
+The resume you attached is empty.,الملف الذي أرفقته فارغ.
+Your resume is too large. Please attach a file under 5 MB.,حجم السيرة الذاتية كبير جداً. يرجى إرفاق ملف أقل من 5 ميجابايت.
+Something went wrong. Please try again.,حدث خطأ ما. يرجى المحاولة مرة أخرى.
+Your application has been submitted successfully.,تم إرسال طلبك بنجاح.
+You have already applied for this position.,لقد تقدمت بالفعل لهذه الوظيفة.
+Cannot create a Job Applicant against a closed Job Opening,لا يمكن إنشاء طلب توظيف لوظيفة مغلقة
+Duplicate Application,طلب مكرر
+Received,تم الاستلام
+Under review,قيد المراجعة
+Shortlisted,في القائمة المختصرة
+Closed,مغلق
+Accepted,مقبول
+General application,طلب توظيف عام

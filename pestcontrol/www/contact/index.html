@@ -1,183 +1,114 @@
 {% extends "pestcontrol/templates/includes/website_base.html" %}
 
 {% block page_header %}
-    {% include "pestcontrol/templates/includes/page_header.html" %}
+{% include "pestcontrol/templates/includes/page_header.html" %}
 {% endblock %}
 
 {% block content %}
-    <!-- Page Contact Us Start -->
-    <div class="page-contact-us">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Contact Info Box Start -->
-                    <div class="contact-info-box">
-                        <!-- Contact Info Item Start -->
-                        <div class="contact-info-item wow fadeInUp">
-                            <div class="icon-box">
-                                <img src="/assets/pestcontrol/website/images/icon-mail.svg" alt="" loading="lazy" decoding="async">
-                            </div>
-                            <div class="contact-info-content">
-                                <h3>{{ _("Email address") }}</h3>
-                                <p><a href="mailto:{{ settings.email }}">{{ settings.email }}</a></p>
-                            </div>
+
+<!-- Contact Form Section Start -->
+<div class="contact-form-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Contact Us Box Start -->
+                <div class="contact-us-box">
+                    <!-- Contact Us Form Start -->
+                    <div class="contact-us-form">
+                        <!-- Section Title Start -->
+                        <div class="section-title">
+                            <h2 class="text-anime-style-2" data-cursor="-opaque">{{ _("Effective pest solutions -") }}
+                                <span>{{ _("reach out today!") }}</span></h2>
                         </div>
-                        <!-- Contact Info Item End -->
+                        <!-- Section Title End -->
 
-                        <!-- Contact Info Item Start -->
-                        <div class="contact-info-item wow fadeInUp" data-wow-delay="0.2s">
-                            <div class="icon-box">
-                                <img src="/assets/pestcontrol/website/images/icon-phone.svg" alt="" loading="lazy" decoding="async">
-                            </div>
-                            <div class="contact-info-content">
-                                <h3>{{ _("Contact Us") }}</h3>
-                                {#- branch_city comes from the linked branch's article, so it
-                                    renders in the visitor's language. -#}
-                                {% for p in settings.phone_numbers %}
-                                <p><a href="tel:{{ p.phone_number }}">{{ p.phone_number }}</a>{% if p.branch_city %} <span class="phone-city">&mdash; {{ p.branch_city }}</span>{% endif %}</p>
-                                {% endfor %}
-                                {% set wa = whatsapp_url(_("Hello, I would like to ask about your pest control services.")) %}
-                                  {% if wa %}<p><a href="{{ wa }}" target="_blank" rel="noopener noreferrer">{{ settings.whatsapp }}</a></p>{% endif %}
-                            </div>
-                        </div>
-                        <!-- Contact Info Item End -->
-
-                        {% if branches %}
-                        {% for b in branches %}
-                        {% set branch_city = localize(b, "city") %}
-                        <!-- Contact Info Item Start -->
-                        <div class="contact-info-item wow fadeInUp" data-wow-delay="{{ 0.4 + loop.index0 * 0.15 }}s">
-                            <div class="icon-box">
-                                <img src="/assets/pestcontrol/website/images/icon-location.svg" alt="" loading="lazy" decoding="async">
-                            </div>
-                            <div class="contact-info-content">
-                                <h3>{{ localize(b, "branch_name") }}{% if branch_city %} &mdash; {{ branch_city }}{% endif %}</h3>
-                                <p>{{ localize(b, "address") }}</p>
-                                {% if b.phone %}<p><a href="tel:{{ b.phone }}">{{ b.phone }}</a></p>{% endif %}
-                            </div>
-                        </div>
-                        <!-- Contact Info Item End -->
-                        {% endfor %}
-                        {% else %}
-                        <!-- Contact Info Item Start -->
-                        <div class="contact-info-item wow fadeInUp" data-wow-delay="0.4s">
-                            <div class="icon-box">
-                                <img src="/assets/pestcontrol/website/images/icon-location.svg" alt="" loading="lazy" decoding="async">
-                            </div>
-                            <div class="contact-info-content">
-                                <h3>{{ _("location") }}</h3>
-                                <p>{{ localize(settings, "address") }}</p>
-                            </div>
-                        </div>
-                        <!-- Contact Info Item End -->
-                        {% endif %}
-
-                        <!-- Contact Info Item Start -->
-                        <div class="contact-info-item wow fadeInUp" data-wow-delay="0.6s">
-                            <div class="icon-box">
-                                <img src="/assets/pestcontrol/website/images/icon-clock.svg" alt="" loading="lazy" decoding="async">
-                            </div>
-                            <div class="contact-info-content">
-                                <h3>{{ _("Working Hours") }}</h3>
-                                <p>{{ _("Mon - Sat :- 7:00 to 5:00") }}</p>
-                                <p>{{ _("Sunday :- Close") }}</p>
-                            </div>
-                        </div>
-                        <!-- Contact Info Item End -->
-                    </div>
-                    <!-- Contact Info Box End -->
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Page Contact Us End -->
-
-    <!-- Contact Form Section Start -->
-    <div class="contact-form-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Contact Us Box Start -->
-                    <div class="contact-us-box">
-                        <!-- Contact Us Form Start -->
-                        <div class="contact-us-form">
-                            <!-- Section Title Start -->
-                            <div class="section-title">
-                                <h2 class="text-anime-style-2" data-cursor="-opaque">{{ _("Effective pest solutions -") }} <span>{{ _("reach out today!") }}</span></h2>
-                            </div>
-                            <!-- Section Title End -->
-
-                            <form id="contactForm" action="#" method="POST" data-toggle="validator" class="contact-form wow fadeInUp">
-                                <div class="row">
-                                    <div class="form-group col-md-6 mb-4">
-                                        <label for="fname" class="visually-hidden">{{ _('First name') }}</label>
-                                        <input type="text" name="fname" class="form-control" id="fname" placeholder="{{ _('First name') }}" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <label for="lname" class="visually-hidden">{{ _('Last name') }}</label>
-                                        <input type="text" name="lname" class="form-control" id="lname" placeholder="{{ _('Last name') }}" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <label for="email" class="visually-hidden">{{ _('E-mail') }}</label>
-                                        <input type="email" name ="email" class="form-control" id="email" placeholder="{{ _('E-mail') }}" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-6 mb-4">
-                                        <label for="phone" class="visually-hidden">{{ _('Phone no.') }}</label>
-                                        <input type="text" name="phone" class="form-control" id="phone" placeholder="{{ _('Phone no.') }}" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="form-group col-md-12 mb-5">
-                                        <label for="message" class="visually-hidden">{{ _('Message') }}</label>
-                                        <textarea name="message" class="form-control" id="message" rows="4" placeholder="{{ _('Message') }}"></textarea>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-
-                                    <div class="col-md-12">
-                                        <button type="submit" class="btn-default"><span>{{ _("send message") }}</span></button>
-                                        <div id="msgSubmit" class="h3 hidden"></div>
-                                    </div>
+                        <form id="contactForm" action="#" method="POST" data-toggle="validator"
+                            class="contact-form wow fadeInUp">
+                            <div class="row">
+                                <div class="form-group col-md-6 mb-4">
+                                    <label for="fname" class="visually-hidden">{{ _('First name') }}</label>
+                                    <input type="text" name="fname" class="form-control" id="fname"
+                                        placeholder="{{ _('First name') }}" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
-                            </form>
-                        </div>
-                        <!-- Contact Us Form End -->
 
-                        <!-- Contact Us Image Start -->
-                        <div class="contact-us-image">
-                            <figure class="image-anime">
-                                <img src="/assets/pestcontrol/website/images/contact-us-img.jpg" alt="" loading="lazy" decoding="async">
-                            </figure>
-                        </div>
-                        <!-- Contact Us Image End -->
+                                <div class="form-group col-md-6 mb-4">
+                                    <label for="lname" class="visually-hidden">{{ _('Last name') }}</label>
+                                    <input type="text" name="lname" class="form-control" id="lname"
+                                        placeholder="{{ _('Last name') }}" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <div class="form-group col-md-6 mb-4">
+                                    <label for="email" class="visually-hidden">{{ _('E-mail') }}</label>
+                                    <input type="email" name="email" class="form-control" id="email"
+                                        placeholder="{{ _('E-mail') }}" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <div class="form-group col-md-6 mb-4">
+                                    <label for="phone" class="visually-hidden">{{ _('Phone no.') }}</label>
+                                    <input type="text" name="phone" class="form-control" id="phone"
+                                        placeholder="{{ _('Phone no.') }}" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <div class="form-group col-md-12 mb-5">
+                                    <label for="message" class="visually-hidden">{{ _('Message') }}</label>
+                                    <textarea name="message" class="form-control" id="message" rows="4"
+                                        placeholder="{{ _('Message') }}" required></textarea>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn-default"><span>{{ _("send message")
+                                            }}</span></button>
+                                    <div id="msgSubmit" class="h3 hidden"></div>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <!-- Contact Us Box End -->
+                    <!-- Contact Us Form End -->
+
+                    <!-- Contact Us Text Start -->
+                    <div class="contact-us-text">
+                        <h3>{{ _("Why Choose") }} {{ settings.site_name or "Skystar" }}?</h3>
+                        <p>{{ _("Fast response, certified technicians, and eco-friendly treatments — trusted by homes and businesses across Saudi Arabia to solve pest problems for good.") }}</p>
+                        <div class="cta-box-body">
+                            <ul>
+                                <li>{{ _("Licensed & Certified Technicians") }}</li>
+                                <li>{{ _("Eco-Friendly, Family-Safe Treatments") }}</li>
+                                <li>{{ _("Fast Response, Guaranteed Results") }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Contact Us Text End -->
                 </div>
+                <!-- Contact Us Box End -->
             </div>
         </div>
     </div>
-    <!-- Contact Form Section End -->
+</div>
+<!-- Contact Form Section End -->
 
-    <!-- Google Map Section Start -->
-    <div class="google-map">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Google Map IFrame Start -->
-                    <div class="google-map-iframe">
-                        {% set contact_map = (branches[0].map_embed_url if branches and branches[0].map_embed_url else settings.map_embed_url) %}
-                        <iframe src="{{ contact_map or 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96737.10562045308!2d-74.08535042841811!3d40.739265258395164!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1703158537552!5m2!1sen!2sin' }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                    </div>
-                    <!-- Google Map IFrame End -->
+<!-- Google Map Section Start -->
+<div class="google-map">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Google Map IFrame Start -->
+                <div class="google-map-iframe">
+                    {% set contact_map = (branches[0].map_embed_url if branches and branches[0].map_embed_url else
+                    settings.map_embed_url) %}
+                    <iframe
+                        src="{{ contact_map or 'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d96737.10562045308!2d-74.08535042841811!3d40.739265258395164!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sin!4v1703158537552!5m2!1sen!2sin' }}"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
+                <!-- Google Map IFrame End -->
             </div>
         </div>
     </div>
-    <!-- Google Map Section End -->
+</div>
+<!-- Google Map Section End -->
 
 {% endblock %}

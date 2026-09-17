@@ -40,7 +40,7 @@
                                 <span class="nav-account-name">{{ user_full_name or _("Account") }}</span>
                             </a>
                             <ul>
-                                <li class="nav-item"><a class="nav-link" href="{{ u('/portal') }}">{{ _("Dashboard") }}</a></li>
+                                <li class="nav-item"><a class="nav-link" href="{{ u('/portal') if is_website_user else '/app' }}">{{ _("Dashboard") }}</a></li>
                                 <li class="nav-item"><a class="nav-link" id="logoutLink" href="/api/method/logout">{{ _("Logout") }}</a></li>
                             </ul>
                         </li>

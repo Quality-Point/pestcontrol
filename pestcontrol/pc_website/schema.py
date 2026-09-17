@@ -182,6 +182,7 @@ def _from_document(doc, context, base):
 		"Website Service": _service,
 		"Website Blog Post": _blog_posting,
 		"Website Team Member": _person,
+		"Job Opening": _job_posting,
 	}
 	builder = builders.get(doc.get("doctype"))
 	return builder(doc, context, base) if builder else None
@@ -242,6 +243,107 @@ def _person(doc, context, base):
 		node["jobTitle"] = title
 	if photo := doc.get("photo"):
 		node["image"] = get_url(photo)
+	return node
+
+
+# -- job openings ---------------------------------------------------------
+
+# Google validates employmentType against a fixed vocabulary; the Employment
+# Type doctype is a free-text master, so "Full-time" would be rejected. Keyed
+# on the scrubbed value so casing and punctuation in the master do not matter.
+# Anything unrecognised is left out rather than guessed at.
+EMPLOYMENT_TYPES = {
+	"full_time": "FULL_TIME",
+	"part_time": "PART_TIME",
+	"contract": "CONTRACTOR",
+	"contractor": "CONTRACTOR",
+	"temporary": "TEMPORARY",
+	"intern": "INTERN",
+	"internship": "INTERN",
+	"apprenticeship": "OTHER",
+	"probation": "OTHER",
+	"commission": "OTHER",
+}
+
+# Job Opening.salary_per is Month/Year; schema.org wants a duration keyword.
+SALARY_UNITS = {"month": "MONTH", "year": "YEAR"}
+
+
+def _job_location(doc, context):
+	"""PostalAddress for the opening.
+
+	`location` is a Link to ERPNext's Branch, which holds nothing but a name --
+	there is no address behind it. So addressCountry is all that can be stated
+	outright, and addressLocality is only added when a published Website Branch
+	corroborates the name as a real city. Guessing that "Main Branch" is a
+	locality would put a false claim in front of Google, which is exactly what
+	this module refuses to do elsewhere.
+
+	Reads context.branches, which get_website_context has already fetched with
+	article bundles attached -- the same list _local_businesses works from.
+	"""
+	address = {"@type": "PostalAddress", "addressCountry": "SA"}
+	wanted = (doc.get("location") or "").strip().lower()
+	if not wanted:
+		return address
+
+	for branch in context.get("branches") or []:
+		city = localize(branch, "city")
+		if city and city.strip().lower() == wanted:
+			address["addressLocality"] = city
+			break
+	return address
+
+
+def _job_posting(doc, context, base):
+	"""JobPosting for a Job Opening detail page.
+
+	Only the properties google actually reads, and only where the data is
+	real. `inLanguage` is the site's default rather than the language being
+	served: Job Opening has no Website Article bundle, so the arabic and
+	english URLs carry identical english content, and claiming otherwise would
+	be a lie the hreflang pair already makes hard enough to defend.
+	"""
+	node = {
+		"@type": "JobPosting",
+		"@id": f"{context.seo_canonical}#jobposting",
+		"title": doc.get("job_title"),
+		"url": context.seo_canonical,
+		"hiringOrganization": {"@id": f"{base}/#organization"},
+		"inLanguage": frappe.db.get_single_value("PC Website Settings", "default_language") or "en",
+		"identifier": {
+			"@type": "PropertyValue",
+			"name": doc.get("company") or context.settings.get("site_name"),
+			"value": doc.get("name"),
+		},
+		"jobLocation": {"@type": "Place", "address": _job_location(doc, context)},
+	}
+
+	if description := doc.get("description"):
+		node["description"] = description
+	if posted_on := doc.get("posted_on"):
+		node["datePosted"] = str(posted_on)
+	if closes_on := doc.get("closes_on"):
+		node["validThrough"] = str(closes_on)
+	if employment_type := EMPLOYMENT_TYPES.get(frappe.scrub(doc.get("employment_type") or "")):
+		node["employmentType"] = employment_type
+
+	# Pay is published only when HR ticked the box on the opening; the public
+	# page honours that, and so must the markup.
+	if doc.get("publish_salary_range") and (doc.get("lower_range") or doc.get("upper_range")):
+		value = {"@type": "QuantitativeValue"}
+		if doc.get("lower_range"):
+			value["minValue"] = doc.get("lower_range")
+		if doc.get("upper_range"):
+			value["maxValue"] = doc.get("upper_range")
+		if unit := SALARY_UNITS.get((doc.get("salary_per") or "").strip().lower()):
+			value["unitText"] = unit
+		node["baseSalary"] = {
+			"@type": "MonetaryAmount",
+			"currency": doc.get("currency"),
+			"value": value,
+		}
+
 	return node
 
 

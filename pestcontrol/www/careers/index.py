@@ -3,14 +3,6 @@ from frappe import _
 
 from pestcontrol.pc_website.utils import get_website_context
 
-
-def _default_currency():
-	company = frappe.defaults.get_global_default("company")
-	if company:
-		return frappe.get_cached_value("Company", company, "default_currency") or "SAR"
-	return "SAR"
-
-
 # Listed in /sitemap.xml. frappe's www sitemap only includes pages that
 # opt in with this module attribute (website/router.py load_properties_from_controller).
 sitemap = 1
@@ -28,20 +20,28 @@ def get_context(context):
 		{"label": _("home"), "route": ""},
 		{"label": _("careers"), "route": "careers"},
 	]
-	# Positions offered on the careers form come straight from HRMS Job
-	# Openings — admins create them there, tick "Publish on website" (publish)
-	# and set Status = Open to make them selectable here. Same filter HRMS's
-	# own /jobs portal uses.
+
+	# Straight from HRMS Job Openings -- admins create them there, tick
+	# "Publish on website" and set Status = Open. Same filter HRMS's own
+	# /jobs portal uses. `route` comes from PCJobOpening, so every card links
+	# into the careers section rather than HRMS's jobs/<company>/ tree.
 	context.job_openings = frappe.get_all(
 		"Job Opening",
 		filters={"status": "Open", "publish": 1},
-		fields=["name", "job_title", "location", "department"],
+		fields=[
+			"name",
+			"job_title",
+			"route",
+			"location",
+			"department",
+			"employment_type",
+			"closes_on",
+		],
 		order_by="posted_on desc",
 	)
-	# Reference data for the redesigned form's selects. Applications become
-	# HRMS Job Applicant records, so these mirror that doctype's country /
-	# currency link targets.
-	context.countries = frappe.get_all("Country", pluck="name", order_by="name asc")
-	context.currencies = frappe.get_all("Currency", filters={"enabled": 1}, pluck="name", order_by="name asc")
-	context.default_country = frappe.db.get_default("country") or "Saudi Arabia"
-	context.default_currency = _default_currency()
+
+	# Filter options are derived from what is actually open, not from the
+	# Department and Branch masters: offering a filter that matches nothing
+	# is worse than offering no filter.
+	context.departments = sorted({j.department for j in context.job_openings if j.department})
+	context.locations = sorted({j.location for j in context.job_openings if j.location})

@@ -41,6 +41,10 @@
   "column_break_wsco",
   "team_size",
   "satisfaction_rate",
+  "cta_box_tab",
+  "cta_box_image",
+  "column_break_wscb",
+  "cta_box_background_image",
   "seo_tab",
   "seo_section",
   "default_language",
@@ -269,6 +273,27 @@
    "label": "Article",
    "options": "Website Article",
    "reqd": 1
+  },
+  {
+   "fieldname": "cta_box_tab",
+   "fieldtype": "Tab Break",
+   "label": "CTA Box"
+  },
+  {
+   "description": "Technician photo shown in the homepage \"Let's talk about your pest control needs\" section. Falls back to the default template image if left empty.",
+   "fieldname": "cta_box_image",
+   "fieldtype": "Attach Image",
+   "label": "Image"
+  },
+  {
+   "fieldname": "column_break_wscb",
+   "fieldtype": "Column Break"
+  },
+  {
+   "description": "Background texture behind that same section. Falls back to the default template background if left empty.",
+   "fieldname": "cta_box_background_image",
+   "fieldtype": "Attach Image",
+   "label": "Background Image"
   },
   {
    "fieldname": "seo_tab",
