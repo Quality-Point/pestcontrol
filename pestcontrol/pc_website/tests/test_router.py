@@ -19,6 +19,7 @@ from werkzeug.test import EnvironBuilder
 from werkzeug.wrappers import Request
 
 from pestcontrol.pc_website.router import resolve
+from pestcontrol.pc_website.seo import build_seo_context
 
 
 def _bind(path, query=""):
@@ -86,24 +87,44 @@ class TestLanguageRouter(FrappeTestCase):
 	def test_project_detail_belongs_to_us(self):
 		"""Website Project generates /project/<slug>, which we do prefix."""
 		_bind("project/some-slug")
-		with self.assertRaises(frappe.Redirect):
+		try:
 			resolve("project/some-slug")
-		self.assertTrue(frappe.flags.redirect_location.startswith("/"))
-		self.assertIn("/project/some-slug", frappe.flags.redirect_location)
+		except frappe.Redirect:
+			self.fail("/project/some-slug is ours and must render directly, not redirect")
+		self.assertEqual(frappe.local.pc_prefix, f"/{self._default()}")
 
-	# -- redirects to the default language --------------------------------
+	# -- unprefixed paths render the default language directly ------------
 
-	def test_root_redirects_to_default_language(self):
+	def test_root_serves_default_language_directly(self):
 		_bind("")
-		with self.assertRaises(frappe.Redirect):
-			resolve("")
-		self.assertEqual(frappe.flags.redirect_location, f"/{self._default()}/")
+		try:
+			endpoint = resolve("")
+		except frappe.Redirect:
+			self.fail("/ must render directly, not redirect")
+		self.assertEqual(endpoint, (frappe.get_hooks("home_page") or ["home"])[-1])
+		self.assertEqual(frappe.local.lang, self._default())
+		self.assertEqual(frappe.local.pc_prefix, f"/{self._default()}")
+		self.assertEqual(frappe.local.pc_bare_path, "")
 
-	def test_unprefixed_page_redirects(self):
+	def test_unprefixed_page_serves_default_language_directly(self):
 		_bind("about")
-		with self.assertRaises(frappe.Redirect):
-			resolve("about")
-		self.assertEqual(frappe.flags.redirect_location, f"/{self._default()}/about")
+		try:
+			endpoint = resolve("about")
+		except frappe.Redirect:
+			self.fail("/about must render directly, not redirect")
+		self.assertEqual(endpoint, "about")
+		self.assertEqual(frappe.local.lang, self._default())
+		self.assertEqual(frappe.local.pc_prefix, f"/{self._default()}")
+		self.assertEqual(frappe.local.pc_bare_path, "about")
+
+	def test_bare_and_prefixed_home_render_identically(self):
+		_bind("")
+		bare_endpoint = resolve("")
+		bare_lang = frappe.local.lang
+		_bind(f"{self._default()}/")
+		prefixed_endpoint = resolve(f"{self._default()}/")
+		self.assertEqual(bare_endpoint, prefixed_endpoint)
+		self.assertEqual(bare_lang, frappe.local.lang)
 
 	def test_lang_query_param_picks_the_target_and_is_dropped(self):
 		"""Migration shim for URLs the old cookie switcher left in the wild."""
@@ -113,7 +134,7 @@ class TestLanguageRouter(FrappeTestCase):
 		self.assertEqual(frappe.flags.redirect_location, "/en/about")
 
 	def test_other_query_params_survive_the_redirect(self):
-		_bind("about", "utm_source=google")
+		_bind("about", "_lang=ar&utm_source=google")
 		with self.assertRaises(frappe.Redirect):
 			resolve("about")
 		self.assertIn("utm_source=google", frappe.flags.redirect_location)
@@ -176,6 +197,28 @@ class TestLanguageRouter(FrappeTestCase):
 			resolve("ar/does-not-exist")
 		except frappe.Redirect:
 			self.fail("a missing page under a prefix must 404, not redirect")
+
+	# -- direct-serve stays indexable via canonical/hreflang ---------------
+
+	def test_bare_path_canonicalizes_to_prefixed_url(self):
+		_bind("about")
+		resolve("about")
+		context = self._seo_context("about")
+		self.assertTrue(context.seo_canonical.endswith(f"/{self._default()}/about"))
+		langs = {alt.lang for alt in context.seo_alternates}
+		self.assertIn(self._default(), langs)
+
+	def test_bare_root_canonicalizes_to_prefixed_home(self):
+		_bind("")
+		resolve("")
+		context = self._seo_context("")
+		self.assertTrue(context.seo_canonical.endswith(f"/{self._default()}/"))
+
+	def _seo_context(self, route):
+		settings = frappe.get_cached_doc("PC Website Settings").as_dict()
+		context = frappe._dict(route=route, settings=settings)
+		build_seo_context(context)
+		return context
 
 	def _default(self):
 		langs = {

@@ -8,6 +8,14 @@ carries no cookie, so exactly one language is ever indexed -- on this site
 that is english, leaving the entire arabic catalogue invisible in the primary
 market. Frappe has no multi-language URL support of its own, so this is ours.
 
+An unprefixed request (`/about`) is not redirected to its prefixed URL --
+it is rendered directly, as the default language, with a 200. Bouncing every
+bare request through a 301 before it could even start rendering was pure
+added latency for the common case. Indexability of both languages instead
+rests on `<link rel="canonical">` and hreflang alternates (pc_website/seo.py),
+which point every bare page at its prefixed URL without costing a round trip
+to get there. `?_lang=xx` still redirects -- see `_lang_override()`.
+
 Registered as `website_path_resolver`, which REPLACES frappe's own
 resolve_path() call inside PathResolver.resolve(). Two consequences:
 
@@ -113,10 +121,31 @@ def resolve(path):
 
 		return _delegate(rest)
 
-	# Unprefixed public path: send it to a language prefix, permanently.
-	target = "/" + _target_language(languages) + ("/" + path if path else "/")
-	frappe.flags.redirect_location = target + _query_suffix()
-	raise frappe.Redirect(301)
+	# Unprefixed public path.
+	if override := _lang_override(languages):
+		# ?_lang=xx is a rare, explicit action (a stale link from the old
+		# cookie-based switcher), not crawler/browser traffic at scale --
+		# keep normalizing it onto the canonical prefixed URL with a 301,
+		# rather than teaching the direct-serve path a second exception.
+		target = "/" + override + ("/" + path if path else "/")
+		frappe.flags.redirect_location = target + _query_suffix()
+		raise frappe.Redirect(301)
+
+	# No override: render the default language directly, no redirect.
+	default = _default_language(languages)
+	frappe.local.lang = default
+	frappe.local.pc_lang = default
+	# pc_prefix stays "/<default>", never "", even though the served path
+	# carries no prefix -- it is what u() and the breadcrumb JSON-LD builder
+	# use for link generation, and seo.py's canonical/hreflang builder keys
+	# off frappe.local.lang, not the request path. Setting both here is what
+	# makes GET / canonicalize to /<default>/, exactly like GET /<default>/
+	# does today.
+	frappe.local.pc_prefix = "/" + default
+	frappe.local.pc_bare_path = path
+	if not path:
+		return (frappe.get_hooks("home_page") or ["home"])[-1]
+	return _delegate(path)
 
 
 def u(path=""):
@@ -176,19 +205,18 @@ def _generator_roots():
 	return roots
 
 
-def _target_language(languages):
-	"""Language to redirect an unprefixed path to.
+def _lang_override(languages):
+	"""`?_lang=xx`, when present and valid -- else None.
 
-	`?_lang=xx` wins, so links the old cookie-based switcher put into the wild
-	land on the page they meant. Varying on a query param is safe -- it is part
-	of the URL, so caches see two distinct URLs. Varying on the *cookie* would
-	not be: that redirect is uncacheable by any CDN, and a crawler must always
-	get one stable target. Hence the cookie is never consulted here.
+	A migration shim for links the old cookie-based switcher put into the
+	wild. Varying on a query param is safe -- it is part of the URL, so caches
+	see two distinct URLs. Varying on the *cookie* would not be: that redirect
+	is uncacheable by any CDN, and a crawler must always get one stable
+	target. Hence the cookie is never consulted here or for the default-
+	language direct-serve path.
 	"""
 	requested = frappe.form_dict.get("_lang") if frappe.form_dict else None
-	if requested in languages:
-		return requested
-	return _default_language(languages)
+	return requested if requested in languages else None
 
 
 def _default_language(languages):
