@@ -93,7 +93,7 @@
                             </div>
                             <div class="best-service-item-content">
                                 <h3>{{ _("Comprehensive Coverage") }}</h3>
-                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}</a>
+                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}<span class="visually-hidden">: {{ _("Comprehensive Coverage") }}</span></a>
                             </div>
                         </div>
                         <!-- Best Service Item End -->
@@ -105,7 +105,7 @@
                             </div>
                             <div class="best-service-item-content">
                                 <h3>{{ _("Fast Response Times") }}</h3>
-                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}</a>
+                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}<span class="visually-hidden">: {{ _("Fast Response Times") }}</span></a>
                             </div>
                         </div>
                         <!-- Best Service Item End -->
@@ -117,7 +117,7 @@
                             </div>
                             <div class="best-service-item-content">
                                 <h3>{{ _("Commercial Services") }}</h3>
-                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}</a>
+                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}<span class="visually-hidden">: {{ _("Commercial Services") }}</span></a>
                             </div>
                         </div>
                         <!-- Best Service Item End -->
@@ -129,7 +129,7 @@
                             </div>
                             <div class="best-service-item-content">
                                 <h3>{{ _("24/7 Emergency Services") }}</h3>
-                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}</a>
+                                <a href="{{ u('/contact') }}" class="readmore-btn">{{ _("read more") }}<span class="visually-hidden">: {{ _("24/7 Emergency Services") }}</span></a>
                             </div>
                         </div>
                         <!-- Best Service Item End -->
@@ -297,9 +297,6 @@
                                             <div class="service-content">
                                                 <h3><a href="{{ u('/' ~ service.route) }}">{{ localize(service, "service_name") }}</a></h3>
                                                 <p>{{ localize(service, "short_description") }}</p>
-                                            </div>
-                                            <div class="service-btn">
-                                                <a href="{{ u('/' ~ service.route) }}" class="readmore-btn">{{ _("read More") }}</a>
                                             </div>
                                         </div>
                                         <!-- Service Body End -->
@@ -848,12 +845,6 @@
                                 <h2><a href="{{ u('/' ~ post.route) }}">{{ localize(post, "title") }}</a></h2>
                             </div>
                             <!-- Post Item Content End -->
-
-                            <!-- Blog Item Button Start -->
-                            <div class="post-item-btn">
-                                <a href="{{ u('/' ~ post.route) }}" class="readmore-btn">{{ _("read more") }}</a>
-                            </div>
-                            <!-- Blog Item Button End -->
                         </div>
                         <!-- Post Item Body End -->
                     </div>
