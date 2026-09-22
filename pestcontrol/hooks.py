@@ -93,9 +93,10 @@ website_redirects = [
 	# language and cannot add one. The prefixed variants therefore come
 	# first, so that an /en/... or /ar/... inbound link -- which is what the
 	# router itself emits -- resolves in a single hop. A bare /jobs/... costs
-	# two (here, then the router). No target matches any source, so no rule
-	# can loop. Patterns are $-anchored by resolve_redirect, so /jobseeker is
-	# untouched.
+	# that same one hop (here), then renders directly under /careers -- the
+	# router no longer redirects unprefixed paths. No target matches any
+	# source, so no rule can loop. Patterns are $-anchored by resolve_redirect,
+	# so /jobseeker is untouched.
 	{"source": r"/(ar|en)/jobs/[^/]+/(.+)", "target": r"/\1/careers/\2"},
 	{"source": r"/jobs/[^/]+/(.+)", "target": r"/careers/\1"},
 	{"source": r"/(ar|en)/jobs(/.*)?", "target": r"/\1/careers"},
