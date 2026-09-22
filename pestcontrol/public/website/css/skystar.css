@@ -814,40 +814,16 @@ html.a11y-widget-minimized .topbar-a11y-toggle:focus-visible{
 	padding: 12px 24px;
 }
 
-/*
- * Chromium/WebKit disable complex-script shaping (Arabic letter joining)
- * on any element with a non-zero letter-spacing, even a small negative
- * tracking value used purely for Latin headings. That makes Arabic text
- * render as isolated, disconnected letters. Force it back to normal
- * across the whole page whenever we're in an RTL (Arabic) context.
- */
 html[dir="rtl"] * {
 	letter-spacing: normal !important;
 }
 
-/*
- * Phone numbers and WhatsApp links are always LTR content ("+966 54 362
- * 7727"), but sitting inside an RTL page with nothing marking them as
- * such, the browser's bidi algorithm can visually reorder the space-
- * separated digit groups (digits/"+" are "weak" bidi characters with no
- * strong direction of their own to anchor them). `direction: ltr` plus
- * `unicode-bidi: isolate` forces the number to render in its own
- * independent left-to-right run, the same fix a native <bdi> tag would
- * give — applied globally via the href pattern instead of hunting down
- * every template that prints a phone number.
  */
 a[href^="tel:"],
 a[href^="https://wa.me/"] {
 	unicode-bidi: isolate;
 }
 
-/*
- * Breadcrumb ("Home / Contact us") — Bootstrap's separator is built with
- * float:left plus padding-left/padding-right, all physical sides that
- * don't flip for RTL, so the "/" ends up stuck on the wrong edge instead
- * of sitting between the two items. `float: inline-start` and logical
- * padding fix both directions from one rule, no separate RTL override.
- */
 .breadcrumb-item {
 	padding-left: 0;
 	padding-inline-start: var(--bs-breadcrumb-item-padding-x);
@@ -859,15 +835,6 @@ a[href^="https://wa.me/"] {
 	padding-inline-end: var(--bs-breadcrumb-item-padding-x);
 }
 
-/*
- * Login / signup — full-bleed background photo (admin-configurable via
- * PC Website Settings > Login Page, set inline per-page so it can be a
- * dynamic value; falls back to the same static photo .page-header uses).
- * .container is a two-item flex row: the info text and the white card.
- * Because they're plain flex items (not manually positioned left/right),
- * they naturally swap sides for RTL along with everything else on the
- * site — the card ends up on the "near" edge, the text fills the rest.
- */
 .auth-page{
 	position: relative;
 	min-height: 100vh;
@@ -977,11 +944,6 @@ a[href^="https://wa.me/"] {
 	}
 }
 
-/*
- * Topbar language dropdown. Built to scale past two languages: the list
- * is rendered from the `languages` context list (see pc_website/utils.py),
- * so adding a new language means adding one entry there, not touching CSS.
- */
 .lang-switch{
 	position: relative;
 }
@@ -1003,16 +965,13 @@ a[href^="https://wa.me/"] {
 	transition: background 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-/* Accessibility toggle, sitting in the topbar's icon row next to the
-   language switcher — same pill shape and sizing as .lang-switch-toggle,
-   but ghost/translucent rather than solid, icon plus a visible label. */
 .topbar-a11y-toggle{
 	display: flex;
 	align-items: center;
 	gap: 6px;
 	flex-shrink: 0;
 	border: none;
-	background: rgba(255, 255, 255, 0.15);
+	background: rgba(0, 0, 0, 0.15);
 	color: var(--white-color);
 	font-size: 13px;
 	font-weight: 600;
@@ -1028,9 +987,6 @@ a[href^="https://wa.me/"] {
 }
 
 @media only screen and (max-width: 575px){
-	/* Visually collapsed, not display:none — the label stays in the
-	   accessibility tree so the button still has a real accessible name
-	   on narrow screens, it just isn't painted on screen. */
 	.topbar-a11y-toggle span{
 		position: absolute;
 		width: 1px;
@@ -1050,7 +1006,7 @@ a[href^="https://wa.me/"] {
 
 .topbar-a11y-toggle:hover,
 .topbar-a11y-toggle:focus-visible{
-	background: rgba(255, 255, 255, 0.25);
+	background: rgba(0, 0, 0, 0.25);
 }
 
 .lang-switch-toggle:hover,
